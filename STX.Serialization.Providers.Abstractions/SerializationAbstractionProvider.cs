@@ -14,8 +14,8 @@ namespace STX.Serialization.Providers.Abstractions
         public SerializationAbstractionProvider(ISerializationProvider serializationProvider) =>
             SerializationProvider = serializationProvider;
 
-        public ValueTask<string> Serialize<T>(T obj) =>
-            throw new NotImplementedException();
+        public async ValueTask<string> Serialize<T>(T obj) =>
+            await this.SerializationProvider.Serialize(obj);
 
         public ValueTask<T> Deserialize<T>(string json) =>
             throw new NotImplementedException();
