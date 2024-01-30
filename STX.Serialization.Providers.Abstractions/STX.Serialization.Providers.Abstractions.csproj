@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<Title>STX.Serialization.Providers.Abstractions</Title>
+		<Product>STX.Serialization.Providers.Abstractions</Product>
+		<PackageId>STX.Serialization.Providers.Abstractions</PackageId>
+		<Authors>The Standard Community</Authors>
+		<Company>The Standard Community</Company>
+		<Description>STX.Serialization.Providers.Abstractions provides abstractions of serialization. Interfaces defined in this package are implemented by classes in SPAL implementations of ISerializationProvider.</Description>
+		<Copyright>The Standard Community 2024 (c)</Copyright>
+		<PackageIcon>Serialization.png</PackageIcon>
+		<PackageProjectUrl>https://github.com/The-Standard-Organization/STX.Serialization.Providers.Abstractions</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/The-Standard-Organization/STX.Serialization.Providers.Abstractions</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Standard; STX; Serialization; Provider; Abstractions; .NET; The Standard</PackageTags>
+		<PackageReleaseNotes>
+			Initial release of STX.Serialization.Providers.Abstractions.
+		</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Version>0.1.0</Version>
+		<AssemblyVersion>0.1.0</AssemblyVersion>
+		<FileVersion>0.1.0</FileVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>License.txt</PackageLicenseFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>true</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\License.txt">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\Resources\Images\Serialization.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>
