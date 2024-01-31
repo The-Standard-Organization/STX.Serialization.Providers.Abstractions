@@ -139,5 +139,47 @@ namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
             actualSerializationDependencyProviderException.Should()
                 .BeEquivalentTo(expectedSerializationDependencyProviderException);
         }
+
+        [Fact]
+        public async Task ShouldCaptureAndLocaliseServiceExceptionsAsync()
+        {
+            // given
+            dynamic dynamicPerson = new
+            {
+                Name = GetRandomString(),
+                Surname = GetRandomString(),
+                Age = GetRandomNumber()
+            };
+
+            dynamic inputPerson = dynamicPerson;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
+
+            TestServiceException testServiceException =
+                new TestServiceException(
+                    message: "Serialization service error occurred, contact support.",
+                    innerException: someException);
+
+            SerializationServiceProviderException expectedSerializationServiceProviderException =
+                new SerializationServiceProviderException(
+                    message: "Serialization service error occurred, contact support.",
+                    innerException: testServiceException,
+                    data: testServiceException.Data);
+
+            this.serializationProviderMock.Setup(provider =>
+                provider.Serialize(It.IsAny<object>()))
+                    .ThrowsAsync(testServiceException);
+
+            // when
+            ValueTask<string> serializationTask =
+                this.serializationAbstractionProvider.Serialize(inputPerson);
+
+            SerializationServiceProviderException actualSerializationServiceProviderException =
+                await Assert.ThrowsAsync<SerializationServiceProviderException>(
+                    serializationTask.AsTask);
+
+            // then
+            actualSerializationServiceProviderException.Should()
+                .BeEquivalentTo(expectedSerializationServiceProviderException);
+        }
     }
 }
