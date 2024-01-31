@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using STX.Serialization.Providers.Abstractions.Models.Exceptions;
-using STX.Serialization.Providers.Abstractions.Models.Exceptions.Bases;
+using STX.Serialization.Providers.Abstractions.Tests.Unit.Models.Exceptions;
+using Xeptions;
 using Xunit;
 
 namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
@@ -25,24 +26,29 @@ namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
             };
 
             dynamic inputPerson = dynamicPerson;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
 
-            Mock<SerializationValidationExceptionBase> serializationValidationExceptionMock =
-                new Mock<SerializationValidationExceptionBase>();
+            TestValidationException testValidationException =
+                new TestValidationException(
+                    message: "Serialization validation errors occurred, please try again.",
+                    innerException: someException);
 
-            var expectedSerializationValidationProviderException = new SerializationValidationProviderException(
-                message: "Serialization validation errors occurred, please try again.",
-                innerException: serializationValidationExceptionMock.Object);
+            SerializationValidationProviderException expectedSerializationValidationProviderException =
+                new SerializationValidationProviderException(
+                    message: "Serialization validation errors occurred, please try again.",
+                    innerException: testValidationException,
+                    data: testValidationException.Data);
 
             this.serializationProviderMock.Setup(provider =>
                 provider.Serialize(It.IsAny<object>()))
-                    .ThrowsAsync(serializationValidationExceptionMock.Object);
+                    .ThrowsAsync(testValidationException);
 
             // when
-            ValueTask<SerializationValidationExceptionBase> serializationTask =
+            ValueTask<string> serializationTask =
                 this.serializationAbstractionProvider.Serialize(inputPerson);
 
-            SerializationValidationExceptionBase actualSerializationValidationProviderException =
-                await Assert.ThrowsAsync<SerializationValidationExceptionBase>(
+            SerializationValidationProviderException actualSerializationValidationProviderException =
+                await Assert.ThrowsAsync<SerializationValidationProviderException>(
                     serializationTask.AsTask);
 
             // then
