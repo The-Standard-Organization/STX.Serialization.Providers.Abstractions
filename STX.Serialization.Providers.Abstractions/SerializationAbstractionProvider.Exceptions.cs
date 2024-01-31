@@ -27,6 +27,10 @@ namespace STX.Serialization.Providers.Abstractions
             {
                 throw CreateValidationException(ex);
             }
+            catch (Xeption ex) when (ex is SerializationDependencyExceptionBase)
+            {
+                throw CreateDependencyException(ex);
+            }
         }
 
         private SerializationValidationProviderException CreateValidationException(
@@ -39,6 +43,17 @@ namespace STX.Serialization.Providers.Abstractions
                     data: exception.Data);
 
             return serializationValidationException;
+        }
+
+        private SerializationDependencyProviderException CreateDependencyException(
+            Xeption exception)
+        {
+            var serializationDependencyException = new SerializationDependencyProviderException(
+                message: "Serialization dependency error occurred, contact support.",
+                innerException: exception,
+                data: exception.Data);
+
+            return serializationDependencyException;
         }
     }
 }
