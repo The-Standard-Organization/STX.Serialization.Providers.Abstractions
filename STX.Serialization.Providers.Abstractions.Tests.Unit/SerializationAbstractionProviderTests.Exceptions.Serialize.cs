@@ -97,5 +97,47 @@ namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
             actualSerializationValidationProviderException.Should()
                 .BeEquivalentTo(expectedSerializationValidationProviderException);
         }
+
+        [Fact]
+        public async Task ShouldCaptureAndLocaliseDependencyExceptionsAsync()
+        {
+            // given
+            dynamic dynamicPerson = new
+            {
+                Name = GetRandomString(),
+                Surname = GetRandomString(),
+                Age = GetRandomNumber()
+            };
+
+            dynamic inputPerson = dynamicPerson;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
+
+            TestDependencyException testDependencyException =
+                new TestDependencyException(
+                    message: "Serialization dependency error occurred, contact support.",
+                    innerException: someException);
+
+            SerializationDependencyProviderException expectedSerializationDependencyProviderException =
+                new SerializationDependencyProviderException(
+                    message: "Serialization dependency error occurred, contact support.",
+                    innerException: testDependencyException,
+                    data: testDependencyException.Data);
+
+            this.serializationProviderMock.Setup(provider =>
+                provider.Serialize(It.IsAny<object>()))
+                    .ThrowsAsync(testDependencyException);
+
+            // when
+            ValueTask<string> serializationTask =
+                this.serializationAbstractionProvider.Serialize(inputPerson);
+
+            SerializationDependencyProviderException actualSerializationDependencyProviderException =
+                await Assert.ThrowsAsync<SerializationDependencyProviderException>(
+                    serializationTask.AsTask);
+
+            // then
+            actualSerializationDependencyProviderException.Should()
+                .BeEquivalentTo(expectedSerializationDependencyProviderException);
+        }
     }
 }
