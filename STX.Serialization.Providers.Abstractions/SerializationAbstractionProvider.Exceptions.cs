@@ -23,6 +23,10 @@ namespace STX.Serialization.Providers.Abstractions
             {
                 throw CreateValidationException(ex);
             }
+            catch (Xeption ex) when (ex is SerializationDependencyValidationExceptionBase)
+            {
+                throw CreateValidationException(ex);
+            }
         }
 
         private SerializationValidationProviderException CreateValidationException(
