@@ -28,8 +28,11 @@ The Standard Community as a promise to you is in upholding these values.
 ## Contact
 
 If you have any suggestions, comments or questions, please feel free to contact me on:
+
 [Twitter](https://twitter.com/hassanrezkhabib)
+
 [LinkedIn](https://www.linkedin.com/in/hassanrezkhabib/)
+
 [E-Mail](mailto:hassanhabib@live.com)
 
 ### Important Notice
