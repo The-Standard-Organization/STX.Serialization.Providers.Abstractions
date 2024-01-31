@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -168,6 +169,49 @@ namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
             this.serializationProviderMock.Setup(provider =>
                 provider.Serialize(It.IsAny<object>()))
                     .ThrowsAsync(testServiceException);
+
+            // when
+            ValueTask<string> serializationTask =
+                this.serializationAbstractionProvider.Serialize(inputPerson);
+
+            SerializationServiceProviderException actualSerializationServiceProviderException =
+                await Assert.ThrowsAsync<SerializationServiceProviderException>(
+                    serializationTask.AsTask);
+
+            // then
+            actualSerializationServiceProviderException.Should()
+                .BeEquivalentTo(expectedSerializationServiceProviderException);
+        }
+
+        [Fact]
+        public async Task ShouldCaptureAndLocaliseAnyNonServiceExceptionsAsync()
+        {
+            // given
+            dynamic dynamicPerson = new
+            {
+                Name = GetRandomString(),
+                Surname = GetRandomString(),
+                Age = GetRandomNumber()
+            };
+
+            dynamic inputPerson = dynamicPerson;
+            Exception someException = new Exception(message: "Some exception occurred.");
+
+            UncatagorizedSerializationProviderException notImplementedSerializationProviderException =
+                new UncatagorizedSerializationProviderException(
+                    message: "Uncatagorized serialization service error occurred, contact support.",
+                    innerException: someException,
+                    data: someException.Data);
+
+            SerializationServiceProviderException expectedSerializationServiceProviderException =
+                new SerializationServiceProviderException(
+                    message: "Uncatagorized serialization service error occurred, contact support.",
+                    innerException: notImplementedSerializationProviderException,
+                    data: notImplementedSerializationProviderException.Data);
+
+            this.serializationProviderMock.Setup(provider =>
+                provider.Serialize(It.IsAny<object>()))
+                    .ThrowsAsync(someException);
 
             // when
             ValueTask<string> serializationTask =
