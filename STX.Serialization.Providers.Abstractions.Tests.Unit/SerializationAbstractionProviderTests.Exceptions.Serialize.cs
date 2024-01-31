@@ -55,5 +55,47 @@ namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
             actualSerializationValidationProviderException.Should()
                 .BeEquivalentTo(expectedSerializationValidationProviderException);
         }
+
+        [Fact]
+        public async Task ShouldCaptureAndLocaliseDependencyValidationExceptionsAsync()
+        {
+            // given
+            dynamic dynamicPerson = new
+            {
+                Name = GetRandomString(),
+                Surname = GetRandomString(),
+                Age = GetRandomNumber()
+            };
+
+            dynamic inputPerson = dynamicPerson;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
+
+            TestDependencyValidationException testDependencyValidationException =
+                new TestDependencyValidationException(
+                    message: "Serialization dependency validation errors occurred, please try again.",
+                    innerException: someException);
+
+            SerializationValidationProviderException expectedSerializationValidationProviderException =
+                new SerializationValidationProviderException(
+                    message: "Serialization validation errors occurred, please try again.",
+                    innerException: testDependencyValidationException,
+                    data: testDependencyValidationException.Data);
+
+            this.serializationProviderMock.Setup(provider =>
+                provider.Serialize(It.IsAny<object>()))
+                    .ThrowsAsync(testDependencyValidationException);
+
+            // when
+            ValueTask<string> serializationTask =
+                this.serializationAbstractionProvider.Serialize(inputPerson);
+
+            SerializationValidationProviderException actualSerializationValidationProviderException =
+                await Assert.ThrowsAsync<SerializationValidationProviderException>(
+                    serializationTask.AsTask);
+
+            // then
+            actualSerializationValidationProviderException.Should()
+                .BeEquivalentTo(expectedSerializationValidationProviderException);
+        }
     }
 }
