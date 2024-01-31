@@ -199,7 +199,8 @@ namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
 
             UncatagorizedSerializationProviderException notImplementedSerializationProviderException =
                 new UncatagorizedSerializationProviderException(
-                    message: "Uncatagorized serialization service error occurred, contact support.",
+                    message: "Serialization provider not properly implemented. Uncatagorized errors found, " +
+                        "contact the serialization provider owner for support.",
                     innerException: someException,
                     data: someException.Data);
 

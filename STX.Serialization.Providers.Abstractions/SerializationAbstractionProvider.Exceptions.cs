@@ -35,6 +35,17 @@ namespace STX.Serialization.Providers.Abstractions
             {
                 throw CreateServiceException(ex);
             }
+            catch (Exception ex)
+            {
+                var uncatagorizedSerializationProviderException =
+                    new UncatagorizedSerializationProviderException(
+                        message: "Serialization provider not properly implemented. Uncatagorized errors found, " +
+                            "contact the serialization provider owner for support.",
+                        innerException: ex,
+                        data: ex.Data);
+
+                throw CreateUncatagorizedServiceException(uncatagorizedSerializationProviderException);
+            }
         }
 
         private SerializationValidationProviderException CreateValidationException(
@@ -66,6 +77,17 @@ namespace STX.Serialization.Providers.Abstractions
             var serializationServiceException = new SerializationServiceProviderException(
                 message: "Serialization service error occurred, contact support.",
                 innerException: exception,
+                data: exception.Data);
+
+            return serializationServiceException;
+        }
+
+        private SerializationServiceProviderException CreateUncatagorizedServiceException(
+            Exception exception)
+        {
+            var serializationServiceException = new SerializationServiceProviderException(
+                message: "Uncatagorized serialization service error occurred, contact support.",
+                innerException: exception as Xeption,
                 data: exception.Data);
 
             return serializationServiceException;
