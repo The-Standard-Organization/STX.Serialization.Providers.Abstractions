@@ -7,7 +7,7 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
+namespace STX.Serialization.Providers.Abstractions.Tests.Unit
 {
     public partial class SerializationAbstractionProviderTests
     {
