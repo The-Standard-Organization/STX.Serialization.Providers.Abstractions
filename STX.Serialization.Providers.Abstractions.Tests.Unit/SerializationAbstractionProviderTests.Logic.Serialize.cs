@@ -15,14 +15,14 @@ namespace LHDS.Core.Tests.Unit.Services.Foundations.Addresses
         public async Task ShouldSerializeAsync()
         {
             // given
-            dynamic dynamicPerson = new
+            dynamic somePerson = new
             {
                 Name = GetRandomString(),
                 Surname = GetRandomString(),
                 Age = GetRandomNumber()
             };
 
-            dynamic inputPerson = dynamicPerson;
+            dynamic inputPerson = somePerson;
             string randomString = GetRandomString();
             string outputString = GetRandomString();
             string expectedString = outputString;
