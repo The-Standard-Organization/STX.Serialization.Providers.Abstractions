@@ -35,5 +35,15 @@ If you have any suggestions, comments or questions, please feel free to contact 
 
 [E-Mail](mailto:hassanhabib@live.com)
 
+### Past Sessions
+
+>YouTube
+>
+>[SPAL (Standardized Provider Abstraction Libraries)](https://youtu.be/JEb0BA8CgFk?si=mrh6IYXLeGFS_Twv)
+>
+>[SPAL(Standardized Provider Abstraction Libraries) Part 2](https://youtu.be/gvoskMQRqHU?si=t8YJfCynI7vXBZMu)
+>
+>[SPAL(Standardized Provider Abstraction Libraries) Part 3](https://youtu.be/98_9I2hpaKA?si=2o6SMx6WiVANBF1W)
+
 ### Important Notice
 A special thanks to Mr. Hassan Habib and Mr. Christo du Toit for their continuing dedicated contributions.
