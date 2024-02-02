@@ -201,6 +201,7 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
                 new UncatagorizedSerializationProviderException(
                     message: "Serialization provider not properly implemented. Uncatagorized errors found, " +
                         "contact the serialization provider owner for support.",
+                        
                     innerException: someException,
                     data: someException.Data);
 
