@@ -25,9 +25,9 @@ We believe that these beliefs will help to ensure that our software(s) are safe 
 
 The Standard Community as a promise to you is in upholding these values. 
 
-### Current Architecture Plan Diagram
+### Architecture
 
-![Planned Architechure](https://raw.githubusercontent.com/The-Standard-Organization/STX.Serialization.Providers.Abstractions/main/Resources/Diagrams/Spal-RESTFulSense.drawio.png)
+![Planned Architechure](https://raw.githubusercontent.com/The-Standard-Organization/STX.Serialization.Providers.Abstractions/main/Resources/Diagrams/spal.drawio.png)
 
 ## Contact
 
