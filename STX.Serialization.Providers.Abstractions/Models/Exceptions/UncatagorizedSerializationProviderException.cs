@@ -8,7 +8,7 @@ using Xeptions;
 
 namespace STX.Serialization.Providers.Abstractions.Models.Exceptions
 {
-    public class UncatagorizedSerializationProviderException : Xeption
+    internal class UncatagorizedSerializationProviderException : Xeption
     {
         public UncatagorizedSerializationProviderException(string message, Exception innerException)
             : base(message, innerException)

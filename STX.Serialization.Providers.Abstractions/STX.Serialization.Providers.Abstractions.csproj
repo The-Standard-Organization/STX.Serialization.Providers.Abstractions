@@ -32,6 +32,11 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Xeption" Version="2.6.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="STX.Serialization.Providers.Abstractions.Tests.Unit" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<None Include="..\README.md">

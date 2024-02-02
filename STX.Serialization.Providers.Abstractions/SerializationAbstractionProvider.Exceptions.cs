@@ -5,7 +5,6 @@
 using System;
 using System.Threading.Tasks;
 using STX.Serialization.Providers.Abstractions.Models.Exceptions;
-using STX.Serialization.Providers.Abstractions.Models.Exceptions.Bases;
 using Xeptions;
 
 namespace STX.Serialization.Providers.Abstractions
@@ -19,19 +18,19 @@ namespace STX.Serialization.Providers.Abstractions
             {
                 return await asyncFunction();
             }
-            catch (Xeption ex) when (ex is SerializationValidationExceptionBase)
+            catch (Exception ex) when (ex is ISerializationValidationException)
             {
                 throw CreateValidationException(ex);
             }
-            catch (Xeption ex) when (ex is SerializationDependencyValidationExceptionBase)
+            catch (Exception ex) when (ex is ISerializationDependencyValidationException)
             {
                 throw CreateValidationException(ex);
             }
-            catch (Xeption ex) when (ex is SerializationDependencyExceptionBase)
+            catch (Exception ex) when (ex is ISerializationDependencyException)
             {
                 throw CreateDependencyException(ex);
             }
-            catch (Xeption ex) when (ex is SerializationServiceExceptionBase)
+            catch (Exception ex) when (ex is ISerializationServiceException)
             {
                 throw CreateServiceException(ex);
             }
@@ -49,34 +48,34 @@ namespace STX.Serialization.Providers.Abstractions
         }
 
         private SerializationValidationProviderException CreateValidationException(
-            Xeption exception)
+            Exception exception)
         {
             var serializationValidationException =
                 new SerializationValidationProviderException(
                     message: "Serialization validation errors occurred, please try again.",
-                    innerException: exception,
+                    innerException: exception as Xeption,
                     data: exception.Data);
 
             return serializationValidationException;
         }
 
         private SerializationDependencyProviderException CreateDependencyException(
-            Xeption exception)
+            Exception exception)
         {
             var serializationDependencyException = new SerializationDependencyProviderException(
                 message: "Serialization dependency error occurred, contact support.",
-                innerException: exception,
+                innerException: exception as Xeption,
                 data: exception.Data);
 
             return serializationDependencyException;
         }
 
         private SerializationServiceProviderException CreateServiceException(
-            Xeption exception)
+            Exception exception)
         {
             var serializationServiceException = new SerializationServiceProviderException(
                 message: "Serialization service error occurred, contact support.",
-                innerException: exception,
+                innerException: exception as Xeption,
                 data: exception.Data);
 
             return serializationServiceException;

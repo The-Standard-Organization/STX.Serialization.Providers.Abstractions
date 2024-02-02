@@ -3,12 +3,11 @@
 // ----------------------------------------------------------------------------------
 
 using System.Collections;
-using STX.Serialization.Providers.Abstractions.Models.Exceptions.Bases;
 using Xeptions;
 
 namespace STX.Serialization.Providers.Abstractions.Models.Exceptions
 {
-    public class SerializationDependencyProviderException : SerializationDependencyExceptionBase
+    public class SerializationDependencyProviderException : Xeption
     {
         public SerializationDependencyProviderException(string message, Xeption innerException)
             : base(message, innerException)

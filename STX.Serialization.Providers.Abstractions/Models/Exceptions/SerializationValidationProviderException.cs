@@ -3,12 +3,11 @@
 // ----------------------------------------------------------------------------------
 
 using System.Collections;
-using STX.Serialization.Providers.Abstractions.Models.Exceptions.Bases;
 using Xeptions;
 
 namespace STX.Serialization.Providers.Abstractions.Models.Exceptions
 {
-    public class SerializationValidationProviderException : SerializationValidationExceptionBase
+    public class SerializationValidationProviderException : Xeption
     {
         public SerializationValidationProviderException(string message, Xeption innerException)
             : base(message, innerException)
