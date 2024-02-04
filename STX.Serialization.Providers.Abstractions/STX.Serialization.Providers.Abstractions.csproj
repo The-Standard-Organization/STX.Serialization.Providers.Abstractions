@@ -44,4 +44,8 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\STX.SPAL.Abstractions\STX.SPAL.Abstractions.csproj" />
+	</ItemGroup>
+
 </Project>
