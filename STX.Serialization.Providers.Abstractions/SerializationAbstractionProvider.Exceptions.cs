@@ -18,30 +18,30 @@ namespace STX.Serialization.Providers.Abstractions
             {
                 return await asyncFunction();
             }
-            catch (Exception ex) when (ex is ISerializationValidationException)
+            catch (Exception exception) when (exception is ISerializationValidationException)
             {
-                throw CreateValidationException(ex);
+                throw CreateValidationException(exception);
             }
-            catch (Exception ex) when (ex is ISerializationDependencyValidationException)
+            catch (Exception exception) when (exception is ISerializationDependencyValidationException)
             {
-                throw CreateValidationException(ex);
+                throw CreateValidationException(exception);
             }
-            catch (Exception ex) when (ex is ISerializationDependencyException)
+            catch (Exception exception) when (exception is ISerializationDependencyException)
             {
-                throw CreateDependencyException(ex);
+                throw CreateDependencyException(exception);
             }
-            catch (Exception ex) when (ex is ISerializationServiceException)
+            catch (Exception exception) when (exception is ISerializationServiceException)
             {
-                throw CreateServiceException(ex);
+                throw CreateServiceException(exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 var uncatagorizedSerializationProviderException =
                     new UncatagorizedSerializationProviderException(
                         message: "Serialization provider not properly implemented. Uncatagorized errors found, " +
                             "contact the serialization provider owner for support.",
-                        innerException: ex,
-                        data: ex.Data);
+                        innerException: exception,
+                        data: exception.Data);
 
                 throw CreateUncatagorizedServiceException(uncatagorizedSerializationProviderException);
             }
