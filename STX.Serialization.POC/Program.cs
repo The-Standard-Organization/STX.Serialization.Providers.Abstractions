@@ -5,6 +5,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using STX.Serialization.Providers.Abstractions;
 using STX.SPAL.Core;
+using System;
 
 namespace STX.Serialization.POC
 	{
