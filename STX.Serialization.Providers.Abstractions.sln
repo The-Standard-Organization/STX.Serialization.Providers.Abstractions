@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.Abstractions.Tests.Acceptance", "STX.Serialization.Providers.Abstractions.Tests.Acceptance\STX.Serialization.Providers.Abstractions.Tests.Acceptance.csproj", "{A3E3CBE6-74E2-4196-94E1-F4238C36639E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Core", "..\STX.Serialization.Core\STX.Serialization.Core.csproj", "{816563DA-AAED-4BDB-A73B-7AF9E0D7CD52}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.SPAL.Core", "STX.SPAL.Core\STX.SPAL.Core.csproj", "{9B7FD3F7-B60C-446E-9934-D55C2FFFE8C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.SPAL.Abstractions", "STX.SPAL.Abstractions\STX.SPAL.Abstractions.csproj", "{4D5CC8C1-688F-41A6-B866-57AD16FEFFA0}"
@@ -39,10 +37,6 @@ Global
 		{A3E3CBE6-74E2-4196-94E1-F4238C36639E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3E3CBE6-74E2-4196-94E1-F4238C36639E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3E3CBE6-74E2-4196-94E1-F4238C36639E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{816563DA-AAED-4BDB-A73B-7AF9E0D7CD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{816563DA-AAED-4BDB-A73B-7AF9E0D7CD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{816563DA-AAED-4BDB-A73B-7AF9E0D7CD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{816563DA-AAED-4BDB-A73B-7AF9E0D7CD52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B7FD3F7-B60C-446E-9934-D55C2FFFE8C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B7FD3F7-B60C-446E-9934-D55C2FFFE8C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B7FD3F7-B60C-446E-9934-D55C2FFFE8C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
