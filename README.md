@@ -25,6 +25,10 @@ We believe that these beliefs will help to ensure that our software(s) are safe 
 
 The Standard Community as a promise to you is in upholding these values. 
 
+### Architecture
+
+![Planned Architechure](https://raw.githubusercontent.com/The-Standard-Organization/STX.Serialization.Providers.Abstractions/main/Resources/Diagrams/spal.drawio.png)
+
 ## Contact
 
 If you have any suggestions, comments or questions, please feel free to contact me on:
