@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
+using System.Text.Json;
 using Moq;
 using Tynamix.ObjectFiller;
 
@@ -25,5 +26,10 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
+
+        public string GetRandomJson(dynamic obj)
+        {
+            return JsonSerializer.Serialize(obj);
+        }
     }
 }
