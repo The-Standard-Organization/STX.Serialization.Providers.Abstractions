@@ -8,7 +8,7 @@ namespace STX.Serialization.Providers.Abstractions
 {
     public interface ISerializationProvider
     {
-        ValueTask<string> Serialize<T>(T obj);
+        ValueTask<string> Serialize<T>(T @object);
         ValueTask<T> Deserialize<T>(string json);
     }
 }

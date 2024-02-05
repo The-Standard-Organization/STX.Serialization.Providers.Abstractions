@@ -2,7 +2,6 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 
 namespace STX.Serialization.Providers.Abstractions
@@ -14,13 +13,20 @@ namespace STX.Serialization.Providers.Abstractions
         public SerializationAbstractionProvider(ISerializationProvider serializationProvider) =>
             SerializationProvider = serializationProvider;
 
-        public ValueTask<string> Serialize<T>(T obj) =>
-            TryCatch<T, string>(() =>
+        public ValueTask<string> Serialize<T>(T @object) =>
+            TryCatch<T, string>(async () =>
             {
-                return this.SerializationProvider.Serialize(obj);
+                ValidateSerializationArgs(@object);
+
+                return await this.SerializationProvider.Serialize(@object);
             });
 
         public ValueTask<T> Deserialize<T>(string json) =>
-            throw new NotImplementedException();
+            TryCatch<string, T>(async () =>
+            {
+                ValidateDeserializationArgs(json);
+
+                return await this.SerializationProvider.Deserialize<T>(json);
+            });
     }
 }

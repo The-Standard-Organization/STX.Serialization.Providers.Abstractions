@@ -2,7 +2,6 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -16,17 +15,11 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
     public partial class SerializationAbstractionProviderTests
     {
         [Fact]
-        public async Task ShouldCaptureAndLocaliseValidationExceptionsOnSerializeAsync()
+        public async Task ShouldCaptureAndLocaliseValidationExceptionsOnDeserializeAsync()
         {
             // given
-            dynamic dynamicPerson = new
-            {
-                Name = GetRandomString(),
-                Surname = GetRandomString(),
-                Age = GetRandomNumber()
-            };
-
-            dynamic inputPerson = dynamicPerson;
+            string someString = GetRandomString();
+            string inputString = someString;
             Xeption someException = new Xeption(message: "Some exception occurred.");
 
             TestValidationException testValidationException =
@@ -41,16 +34,16 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
                     data: testValidationException.Data);
 
             this.serializationProviderMock.Setup(provider =>
-                provider.Serialize(It.IsAny<object>()))
+                provider.Deserialize<object>(It.IsAny<string>()))
                     .ThrowsAsync(testValidationException);
 
             // when
-            ValueTask<string> serializationTask =
-                this.serializationAbstractionProvider.Serialize(inputPerson);
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
 
             SerializationValidationProviderException actualSerializationValidationProviderException =
                 await Assert.ThrowsAsync<SerializationValidationProviderException>(
-                    serializationTask.AsTask);
+                    deserializationTask.AsTask);
 
             // then
             actualSerializationValidationProviderException.Should()
@@ -58,17 +51,11 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
         }
 
         [Fact]
-        public async Task ShouldCaptureAndLocaliseDependencyValidationExceptionsOnSerializeAsync()
+        public async Task ShouldCaptureAndLocaliseDependencyValidationExceptionsOnDeserializeAsync()
         {
             // given
-            dynamic dynamicPerson = new
-            {
-                Name = GetRandomString(),
-                Surname = GetRandomString(),
-                Age = GetRandomNumber()
-            };
-
-            dynamic inputPerson = dynamicPerson;
+            string someString = GetRandomString();
+            string inputString = someString;
             Xeption someException = new Xeption(message: "Some exception occurred.");
 
             TestDependencyValidationException testDependencyValidationException =
@@ -83,16 +70,16 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
                     data: testDependencyValidationException.Data);
 
             this.serializationProviderMock.Setup(provider =>
-                provider.Serialize(It.IsAny<object>()))
+                provider.Deserialize<object>(It.IsAny<string>()))
                     .ThrowsAsync(testDependencyValidationException);
 
             // when
-            ValueTask<string> serializationTask =
-                this.serializationAbstractionProvider.Serialize(inputPerson);
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
 
             SerializationValidationProviderException actualSerializationValidationProviderException =
                 await Assert.ThrowsAsync<SerializationValidationProviderException>(
-                    serializationTask.AsTask);
+                    deserializationTask.AsTask);
 
             // then
             actualSerializationValidationProviderException.Should()
@@ -100,17 +87,11 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
         }
 
         [Fact]
-        public async Task ShouldCaptureAndLocaliseDependencyExceptionsOnSerializeAsync()
+        public async Task ShouldCaptureAndLocaliseDependencyExceptionsOnDeserializeAsync()
         {
             // given
-            dynamic dynamicPerson = new
-            {
-                Name = GetRandomString(),
-                Surname = GetRandomString(),
-                Age = GetRandomNumber()
-            };
-
-            dynamic inputPerson = dynamicPerson;
+            string someString = GetRandomString();
+            string inputString = someString;
             Xeption someException = new Xeption(message: "Some exception occurred.");
 
             TestDependencyException testDependencyException =
@@ -125,16 +106,16 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
                     data: testDependencyException.Data);
 
             this.serializationProviderMock.Setup(provider =>
-                provider.Serialize(It.IsAny<object>()))
+                provider.Deserialize<object>(It.IsAny<string>()))
                     .ThrowsAsync(testDependencyException);
 
             // when
-            ValueTask<string> serializationTask =
-                this.serializationAbstractionProvider.Serialize(inputPerson);
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
 
             SerializationDependencyProviderException actualSerializationDependencyProviderException =
                 await Assert.ThrowsAsync<SerializationDependencyProviderException>(
-                    serializationTask.AsTask);
+                    deserializationTask.AsTask);
 
             // then
             actualSerializationDependencyProviderException.Should()
@@ -142,17 +123,11 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
         }
 
         [Fact]
-        public async Task ShouldCaptureAndLocaliseServiceExceptionsOnSerializeAsync()
+        public async Task ShouldCaptureAndLocaliseServiceExceptionsOnDeserializeAsync()
         {
             // given
-            dynamic dynamicPerson = new
-            {
-                Name = GetRandomString(),
-                Surname = GetRandomString(),
-                Age = GetRandomNumber()
-            };
-
-            dynamic inputPerson = dynamicPerson;
+            string someString = GetRandomString();
+            string inputString = someString;
             Xeption someException = new Xeption(message: "Some exception occurred.");
 
             TestServiceException testServiceException =
@@ -167,16 +142,16 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
                     data: testServiceException.Data);
 
             this.serializationProviderMock.Setup(provider =>
-                provider.Serialize(It.IsAny<object>()))
+                provider.Deserialize<object>(It.IsAny<string>()))
                     .ThrowsAsync(testServiceException);
 
             // when
-            ValueTask<string> serializationTask =
-                this.serializationAbstractionProvider.Serialize(inputPerson);
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
 
             SerializationServiceProviderException actualSerializationServiceProviderException =
                 await Assert.ThrowsAsync<SerializationServiceProviderException>(
-                    serializationTask.AsTask);
+                    deserializationTask.AsTask);
 
             // then
             actualSerializationServiceProviderException.Should()
@@ -184,18 +159,12 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
         }
 
         [Fact]
-        public async Task ShouldCaptureAndLocaliseAnyNonServiceExceptionsOnSerializeAsync()
+        public async Task ShouldCaptureAndLocaliseAnyNonServiceExceptionsOnDeserializeAsync()
         {
             // given
-            dynamic dynamicPerson = new
-            {
-                Name = GetRandomString(),
-                Surname = GetRandomString(),
-                Age = GetRandomNumber()
-            };
-
-            dynamic inputPerson = dynamicPerson;
-            Exception someException = new Exception(message: "Some exception occurred.");
+            string someString = GetRandomString();
+            string inputString = someString;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
 
             UncatagorizedSerializationProviderException notImplementedSerializationProviderException =
                 new UncatagorizedSerializationProviderException(
@@ -212,16 +181,16 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
                     data: notImplementedSerializationProviderException.Data);
 
             this.serializationProviderMock.Setup(provider =>
-                provider.Serialize(It.IsAny<object>()))
+                provider.Deserialize<object>(It.IsAny<string>()))
                     .ThrowsAsync(someException);
 
             // when
-            ValueTask<string> serializationTask =
-                this.serializationAbstractionProvider.Serialize(inputPerson);
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
 
             SerializationServiceProviderException actualSerializationServiceProviderException =
                 await Assert.ThrowsAsync<SerializationServiceProviderException>(
-                    serializationTask.AsTask);
+                    deserializationTask.AsTask);
 
             // then
             actualSerializationServiceProviderException.Should()
