@@ -14,14 +14,19 @@ namespace STX.Serialization.Providers.Abstractions
             SerializationProvider = serializationProvider;
 
         public ValueTask<string> Serialize<T>(T @object) =>
-            TryCatch<T, string>(() =>
+            TryCatch<T, string>(async () =>
             {
                 ValidateSerializationArgs(@object);
 
-                return this.SerializationProvider.Serialize(@object);
+                return await this.SerializationProvider.Serialize(@object);
             });
 
         public ValueTask<T> Deserialize<T>(string json) =>
-            this.SerializationProvider.Deserialize<T>(json);
+            TryCatch<string, T>(async () =>
+            {
+                ValidateDeserializationArgs(json);
+
+                return await this.SerializationProvider.Deserialize<T>(json);
+            });
     }
 }

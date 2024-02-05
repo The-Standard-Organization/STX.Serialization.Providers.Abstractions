@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
+using System;
 using STX.Serialization.Providers.Abstractions.Models.Exceptions;
 
 namespace STX.Serialization.Providers.Abstractions
@@ -13,10 +14,21 @@ namespace STX.Serialization.Providers.Abstractions
             Validate((Rule: IsInvalid(@object), Parameter: "Object"));
         }
 
+        public void ValidateDeserializationArgs(string json)
+        {
+            Validate((Rule: IsInvalid(json), Parameter: "Json"));
+        }
+
         private static dynamic IsInvalid<T>(T @object) => new
         {
             Condition = @object is null,
             Message = "Object is required"
+        };
+
+        private static dynamic IsInvalid(string text) => new
+        {
+            Condition = String.IsNullOrWhiteSpace(text),
+            Message = "Text is required"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
