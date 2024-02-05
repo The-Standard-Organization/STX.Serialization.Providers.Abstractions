@@ -49,5 +49,41 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
             actualSerializationValidationProviderException.Should()
                 .BeEquivalentTo(expectedSerializationValidationProviderException);
         }
+
+        [Fact]
+        public async Task ShouldCaptureAndLocaliseDependencyValidationExceptionsOnDeserializeAsync()
+        {
+            // given
+            string someString = GetRandomString();
+            string inputString = someString;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
+
+            TestDependencyValidationException testDependencyValidationException =
+                new TestDependencyValidationException(
+                    message: "Serialization dependency validation errors occurred, please try again.",
+                    innerException: someException);
+
+            SerializationValidationProviderException expectedSerializationValidationProviderException =
+                new SerializationValidationProviderException(
+                    message: "Serialization validation errors occurred, please try again.",
+                    innerException: testDependencyValidationException,
+                    data: testDependencyValidationException.Data);
+
+            this.serializationProviderMock.Setup(provider =>
+                provider.Deserialize<object>(It.IsAny<string>()))
+                    .ThrowsAsync(testDependencyValidationException);
+
+            // when
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
+
+            SerializationValidationProviderException actualSerializationValidationProviderException =
+                await Assert.ThrowsAsync<SerializationValidationProviderException>(
+                    deserializationTask.AsTask);
+
+            // then
+            actualSerializationValidationProviderException.Should()
+                .BeEquivalentTo(expectedSerializationValidationProviderException);
+        }
     }
 }
