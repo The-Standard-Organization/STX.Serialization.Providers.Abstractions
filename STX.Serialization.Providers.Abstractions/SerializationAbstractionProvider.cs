@@ -2,7 +2,6 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 
 namespace STX.Serialization.Providers.Abstractions
@@ -21,6 +20,6 @@ namespace STX.Serialization.Providers.Abstractions
             });
 
         public ValueTask<T> Deserialize<T>(string json) =>
-            throw new NotImplementedException();
+            this.SerializationProvider.Deserialize<T>(json);
     }
 }
