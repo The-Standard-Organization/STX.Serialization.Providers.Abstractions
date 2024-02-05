@@ -157,5 +157,44 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
             actualSerializationServiceProviderException.Should()
                 .BeEquivalentTo(expectedSerializationServiceProviderException);
         }
+
+        [Fact]
+        public async Task ShouldCaptureAndLocaliseAnyNonServiceExceptionsOnDeserializeAsync()
+        {
+            // given
+            string someString = GetRandomString();
+            string inputString = someString;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
+
+            UncatagorizedSerializationProviderException notImplementedSerializationProviderException =
+                new UncatagorizedSerializationProviderException(
+                    message: "Serialization provider not properly implemented. Uncatagorized errors found, " +
+                        "contact the serialization provider owner for support.",
+
+                    innerException: someException,
+                    data: someException.Data);
+
+            SerializationServiceProviderException expectedSerializationServiceProviderException =
+                new SerializationServiceProviderException(
+                    message: "Uncatagorized serialization service error occurred, contact support.",
+                    innerException: notImplementedSerializationProviderException,
+                    data: notImplementedSerializationProviderException.Data);
+
+            this.serializationProviderMock.Setup(provider =>
+                provider.Deserialize<object>(It.IsAny<string>()))
+                    .ThrowsAsync(someException);
+
+            // when
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
+
+            SerializationServiceProviderException actualSerializationServiceProviderException =
+                await Assert.ThrowsAsync<SerializationServiceProviderException>(
+                    deserializationTask.AsTask);
+
+            // then
+            actualSerializationServiceProviderException.Should()
+                .BeEquivalentTo(expectedSerializationServiceProviderException);
+        }
     }
 }
