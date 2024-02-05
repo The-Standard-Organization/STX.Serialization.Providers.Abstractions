@@ -15,7 +15,7 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
         public async Task ShouldValidateInputsOnSerializeAsync()
         {
             // given
-            dynamic invalidObject = null;
+            object invalidObject = null;
 
             var invalidArgumentSerializationException =
                 new InvalidArgumentSerializationException(message: "Invalid serialization argument(s), " +
@@ -23,20 +23,20 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
 
             invalidArgumentSerializationException.AddData(
                 key: "Object",
-                values: "Value is required");
+                values: "Object is required");
 
             var expectedSerializationValidationProviderException =
                 new SerializationValidationProviderException(
                     message: "Serialization validation errors occurred, please try again.",
-                    innerException: invalidArgumentSerializationException);
+                    innerException: invalidArgumentSerializationException,
+                    data: invalidArgumentSerializationException.Data);
 
             // when
             ValueTask<string> serializeTask =
-                await this.serializationAbstractionProvider.Serialize(invalidObject);
+                this.serializationAbstractionProvider.Serialize(invalidObject);
 
             SerializationValidationProviderException actualSerializationValidationProviderException =
-                await Assert.ThrowsAsync<SerializationValidationProviderException>(() =>
-                    serializeTask.AsTask());
+                await Assert.ThrowsAsync<SerializationValidationProviderException>(serializeTask.AsTask);
 
             // then
             actualSerializationValidationProviderException.Should()

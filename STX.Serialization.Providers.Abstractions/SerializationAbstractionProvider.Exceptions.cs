@@ -18,6 +18,10 @@ namespace STX.Serialization.Providers.Abstractions
             {
                 return await asyncFunction();
             }
+            catch (InvalidArgumentSerializationException invalidArgumentSerializationException)
+            {
+                throw CreateValidationException(invalidArgumentSerializationException);
+            }
             catch (Exception exception) when (exception is ISerializationValidationException)
             {
                 throw CreateValidationException(exception);
