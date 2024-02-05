@@ -121,5 +121,41 @@ namespace STX.Serialization.Providers.Abstractions.Tests.Unit
             actualSerializationDependencyProviderException.Should()
                 .BeEquivalentTo(expectedSerializationDependencyProviderException);
         }
+
+        [Fact]
+        public async Task ShouldCaptureAndLocaliseServiceExceptionsOnDeserializeAsync()
+        {
+            // given
+            string someString = GetRandomString();
+            string inputString = someString;
+            Xeption someException = new Xeption(message: "Some exception occurred.");
+
+            TestServiceException testServiceException =
+                new TestServiceException(
+                    message: "Serialization service error occurred, contact support.",
+                    innerException: someException);
+
+            SerializationServiceProviderException expectedSerializationServiceProviderException =
+                new SerializationServiceProviderException(
+                    message: "Serialization service error occurred, contact support.",
+                    innerException: testServiceException,
+                    data: testServiceException.Data);
+
+            this.serializationProviderMock.Setup(provider =>
+                provider.Deserialize<object>(It.IsAny<string>()))
+                    .ThrowsAsync(testServiceException);
+
+            // when
+            ValueTask<object> deserializationTask =
+                this.serializationAbstractionProvider.Deserialize<object>(inputString);
+
+            SerializationServiceProviderException actualSerializationServiceProviderException =
+                await Assert.ThrowsAsync<SerializationServiceProviderException>(
+                    deserializationTask.AsTask);
+
+            // then
+            actualSerializationServiceProviderException.Should()
+                .BeEquivalentTo(expectedSerializationServiceProviderException);
+        }
     }
 }
