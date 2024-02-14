@@ -5,11 +5,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using STX.SPAL.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace STX.SPAL.Core
 	{
@@ -37,89 +34,54 @@ namespace STX.SPAL.Core
 							.Any(interfaceType =>
 								//@interface is T
 								interfaceType.Assembly.FullName == spalInterfaceType.Assembly.FullName
-									&& interfaceType.Namespace == spalInterfaceType.Namespace
-									&& interfaceType.Name == spalInterfaceType.Name
+									&& interfaceType.FullName == spalInterfaceType.FullName
 							))
 					.ToArray();
 
 			return implementations;
 			}
 
-		private static Assembly[] GetDependantAssemblies(
-				Assembly assembly,
-				int currentDepth = 0,
-				int maximumDepth = DEFAULT_MAXIMUM_DEPTH_ANALISYS)
-			{
-			return assembly
-				.GetReferencedAssemblies()
-				.SelectMany(referencedAssemblyName =>
-					{
-						Assembly referencedAssembly = Assembly.Load(referencedAssemblyName);
-
-						return currentDepth < maximumDepth
-							? GetDependantAssemblies(referencedAssembly, currentDepth + 1, maximumDepth)
-							: new Assembly[] { referencedAssembly };
-					})
-				.ToArray();
-			}
-
-		private static Assembly[] GetAllAssemblies(Assembly rootAssembly)
-			{
-			Assembly[] assemblies =
-				GetDependantAssemblies(rootAssembly)
-				.Distinct()
-				.ToArray();
-
-			return assemblies;
-			}
-
-		// Maybe this should go under an Extension Class for IServiceColletion
-		public static ServiceCollection RegisterAllImplementations<T>(ServiceCollection services)
+		private static Type[] GetExportedTypesFromAssemblyPath<T>(string assemblyPath)
 			where T : ISPALProvider
 			{
-			// Not work because, even STX.Serializations.Providers.XXXXX were added as a dependant project, there is no
-			// type used from the main project. So the compiler "removes" those assemblies from GetReferencedAssemblies.
-			Assembly[] assemblies = GetAllAssemblies(Assembly.GetEntryAssembly());
+			Assembly applicationAssembly = Assembly.LoadFrom(assemblyPath);
 
-			Type[] typesToRegister = assemblies
-				.SelectMany(assembly => GetInterfaceImplementations<T>(assembly))
-				.ToArray();
+			return GetInterfaceImplementations<T>(applicationAssembly);
+			}
 
-			// This strategy uses MetadataLoadContext. Allows inspecting without explicit dependencies and more memory-efficient.
-			// https://learn.microsoft.com/en-us/dotnet/standard/assembly/inspect-contents-using-metadataloadcontext
-			string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
-			var paths = new List<string>(runtimeAssemblies);
+		private static IServiceCollection RegisterImplementation<T>(
+				IServiceCollection services,
+				Type implementationType,
+				bool allowMultipleTypes)
+			{
+			ValidateImplementationTypeRegistered<T>(services, allowMultipleTypes);
 
-			string applicationPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-			string[] applicationAssembliesPaths = Directory.GetFiles(applicationPath, "*.dll");
-			paths.AddRange(applicationAssembliesPaths);
+			services.AddScoped(typeof(T), implementationType);
+			Console.WriteLine($"Registered {implementationType.FullName} ({typeof(T).Name})");
 
-			var pathAssemblyResolver = new PathAssemblyResolver(paths);
-			string coreAssemblyName = typeof(object).Assembly.GetName().Name;
+			return services;
+			}
 
-			using (var metadaLoadContext = new MetadataLoadContext(pathAssemblyResolver, coreAssemblyName))
+		private static IServiceCollection RegisterImplementations<T>(
+				IServiceCollection services,
+				Type[] implementationTypes,
+				bool allowMultipleTypes)
+			{
+			foreach (var implementationType in implementationTypes)
+				RegisterImplementation<T>(services, implementationType, allowMultipleTypes);
+
+			return services;
+			}
+
+		// Maybe this should go under an Extension Class for IServiceCollection
+		public static IServiceCollection RegisterAllImplementations<T>(IServiceCollection services, bool allowMultipleProviders = false)
+			where T : ISPALProvider
+			{
+			string[] applicationAssembliesPaths = GetApplicationAssemblies();
+			foreach (string applicationAssemblyPath in applicationAssembliesPaths)
 				{
-				foreach (string applicationAssemblyPath in applicationAssembliesPaths)
-					{
-					Assembly assembly = metadaLoadContext.LoadFromAssemblyPath(applicationAssemblyPath);
-
-					GetInterfaceImplementations<T>(assembly)
-						.Select(implementationType =>
-							{
-								Assembly runtimeAssembly = Assembly.LoadFrom(applicationAssemblyPath);
-								implementationType = runtimeAssembly.GetExportedTypes()
-									.Single(type => type.Name == implementationType.Name);
-
-								if (services.Any(serviceDescriptor => serviceDescriptor.ServiceType == typeof(T)))
-									throw new Exception($"More than one implementation registered for {typeof(T).Name}. Please specify one of them or use keys for specifing multiple implementations for the same interface.");
-
-								services.AddTransient(typeof(T), implementationType);
-								Console.WriteLine($"Registered {implementationType.FullName} ({typeof(T).Name})");
-
-								return services;
-							})
-						.ToArray();
-					}
+				Type[] exportedTypesOfT = GetExportedTypesFromAssemblyPath<T>(applicationAssemblyPath);
+				RegisterImplementations<T>(services, exportedTypesOfT, allowMultipleProviders);
 				}
 
 			Console.WriteLine($"Register Done!.");
@@ -129,6 +91,11 @@ namespace STX.SPAL.Core
 
 		public T GetImplementation<T>() =>
 			TryCatch(() =>
-				serviceProvider.GetRequiredService<T>());
+			{
+				T instance = serviceProvider.GetRequiredService<T>();
+				ValidateInstance(instance);
+
+				return instance;
+			});
 		}
 	}

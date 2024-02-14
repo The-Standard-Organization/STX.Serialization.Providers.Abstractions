@@ -3,8 +3,8 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Extensions.DependencyInjection;
+using STX.Serialization.Providers;
 using STX.Serialization.Providers.Abstractions;
-using STX.SPAL.Core;
 using System;
 
 namespace STX.Serialization.POC
@@ -13,22 +13,19 @@ namespace STX.Serialization.POC
 		{
 		static void Main(string[] args)
 			{
-			var services = new ServiceCollection();
-			services = SPALOrchestrationService.RegisterAllImplementations<ISerializationProvider>(services);
+			IServiceCollection services = new ServiceCollection();
+
 			services
-				.AddScoped<ISPALOrchestrationService, SPALOrchestrationService>();
+				.RegisterSerializationProviders();
 
 			IServiceProvider serviceProvider = services.BuildServiceProvider();
 			using IServiceScope scope = serviceProvider.CreateScope();
 
-			ISPALOrchestrationService spalOrchestrationService =
+			ISerializationAbstractionProvider serializationAbstractionProvider =
 				scope.ServiceProvider
-					.GetRequiredService<ISPALOrchestrationService>();
+					.GetRequiredService<ISerializationAbstractionProvider>();
 
-			ISerializationProvider serializationProvider =
-				spalOrchestrationService.GetImplementation<ISerializationProvider>();
-
-			System.Console.WriteLine(serializationProvider.GetName());
+			System.Console.WriteLine(serializationAbstractionProvider.GetName());
 			}
 		}
 	}

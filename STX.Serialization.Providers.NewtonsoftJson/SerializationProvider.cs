@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using STX.Serialization.Providers.Abstractions;
+using System.Threading.Tasks;
 
 namespace STX.Serialization.Providers.NewtonsoftJson
 	{
@@ -10,5 +11,15 @@ namespace STX.Serialization.Providers.NewtonsoftJson
 		{
 		public string GetName() =>
 			this.GetType().FullName;
+
+		public ValueTask<T> Deserialize<T>(string content)
+			{
+			throw new System.NotImplementedException();
+			}
+
+		public ValueTask<string> Serialize<T>(T @object)
+			{
+			throw new System.NotImplementedException();
+			}
 		}
 	}

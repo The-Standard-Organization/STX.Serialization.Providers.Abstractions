@@ -16,6 +16,10 @@ namespace STX.SPAL.Core
 				return function();
 				}
 
+			catch(InvalidOperationException invalidOperationException)
+				{
+				throw;
+				}
 			catch (Exception exception)
 				{
 				throw;

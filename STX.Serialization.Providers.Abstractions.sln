@@ -9,15 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.Abstractions.Tests.Acceptance", "STX.Serialization.Providers.Abstractions.Tests.Acceptance\STX.Serialization.Providers.Abstractions.Tests.Acceptance.csproj", "{A3E3CBE6-74E2-4196-94E1-F4238C36639E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.SPAL.Core", "STX.SPAL.Core\STX.SPAL.Core.csproj", "{9B7FD3F7-B60C-446E-9934-D55C2FFFE8C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.SPAL.Core", "STX.SPAL.Core\STX.SPAL.Core.csproj", "{9B7FD3F7-B60C-446E-9934-D55C2FFFE8C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.SPAL.Abstractions", "STX.SPAL.Abstractions\STX.SPAL.Abstractions.csproj", "{4D5CC8C1-688F-41A6-B866-57AD16FEFFA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.SPAL.Abstractions", "STX.SPAL.Abstractions\STX.SPAL.Abstractions.csproj", "{4D5CC8C1-688F-41A6-B866-57AD16FEFFA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.Providers.SystemTextJson", "STX.Serialization.Providers.SystemTextJson\STX.Serialization.Providers.SystemTextJson.csproj", "{A0DE0DD1-7975-47A4-AC20-F95BCC4D8901}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.SystemTextJson", "STX.Serialization.Providers.SystemTextJson\STX.Serialization.Providers.SystemTextJson.csproj", "{A0DE0DD1-7975-47A4-AC20-F95BCC4D8901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.Providers.NewtonsoftJson", "STX.Serialization.Providers.NewtonsoftJson\STX.Serialization.Providers.NewtonsoftJson.csproj", "{9DC355E4-5391-4572-B4D0-26684F00F737}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.NewtonsoftJson", "STX.Serialization.Providers.NewtonsoftJson\STX.Serialization.Providers.NewtonsoftJson.csproj", "{9DC355E4-5391-4572-B4D0-26684F00F737}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.POC", "STX.Serialization.POC\STX.Serialization.POC.csproj", "{4ADB3A3D-FF90-4531-AA33-446A67DF2471}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.POC", "STX.Serialization.POC\STX.Serialization.POC.csproj", "{4ADB3A3D-FF90-4531-AA33-446A67DF2471}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers", "STX.Serialization.Providers\STX.Serialization.Providers.csproj", "{3D7D063A-DE1B-416A-A1B8-40B523B8918C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{4ADB3A3D-FF90-4531-AA33-446A67DF2471}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ADB3A3D-FF90-4531-AA33-446A67DF2471}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ADB3A3D-FF90-4531-AA33-446A67DF2471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7D063A-DE1B-416A-A1B8-40B523B8918C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7D063A-DE1B-416A-A1B8-40B523B8918C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7D063A-DE1B-416A-A1B8-40B523B8918C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7D063A-DE1B-416A-A1B8-40B523B8918C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
