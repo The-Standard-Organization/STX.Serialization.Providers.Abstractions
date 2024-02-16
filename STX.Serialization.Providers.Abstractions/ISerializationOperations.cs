@@ -5,11 +5,11 @@
 using System.Threading.Tasks;
 
 namespace STX.Serialization.Providers.Abstractions
-	{
-	public interface ISerializationOperations
-		{
-		string GetName();
-		ValueTask<string> Serialize<T>(T @object);
-		ValueTask<T> Deserialize<T>(string content);
-		}
-	}
+{
+    public interface ISerializationOperations
+    {
+        string GetName();
+        ValueTask<string> Serialize<T>(T @object);
+        ValueTask<T> Deserialize<T>(string content);
+    }
+}

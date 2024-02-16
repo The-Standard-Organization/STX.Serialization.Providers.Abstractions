@@ -3,8 +3,10 @@
 // ----------------------------------------------------------------------------------
 
 namespace STX.Serialization.Providers.Abstractions
-	{
-	public interface ISerializationAbstractionProvider : ISerializationOperations
-		{
-		}
-	}
+{
+    public interface ISerializationAbstractionProvider : ISerializationOperations
+    {
+        void UseSerializationProvider<T>(string spalId = null) where T : ISerializationProvider;
+        void UseSerializationProvider(string spalId);
+    }
+}

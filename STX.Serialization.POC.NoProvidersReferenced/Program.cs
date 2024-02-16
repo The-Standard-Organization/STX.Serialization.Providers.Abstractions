@@ -7,13 +7,14 @@ using STX.Serialization.Providers;
 using STX.Serialization.Providers.Abstractions;
 using System;
 using System.Runtime.CompilerServices;
-using ProviderNewtonsoft = STX.Serialization.Providers.NewtonsoftJson;
-using ProviderSystemTextJson = STX.Serialization.Providers.SystemTextJson;
 
 namespace STX.Serialization.POC
 {
     internal class Program
     {
+        const string NEWTONSOFT_SPAL_ID = "STX.Serialization.Providers.NewtonsoftJson";
+        const string SYSTEMTEXT_SPAL_ID = "STX.Serialization.Providers.SystemTextJson";
+
         private static void TryCatch(Action action, [CallerMemberName] string testName = "none")
         {
             try
@@ -46,7 +47,7 @@ namespace STX.Serialization.POC
             TryCatch(() =>
             {
                 ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider(typeof(ProviderNewtonsoft.SerializationProvider));
+                    new SerializationAbstractionProvider(NEWTONSOFT_SPAL_ID);
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
@@ -57,11 +58,11 @@ namespace STX.Serialization.POC
             TryCatch(() =>
             {
                 ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider(typeof(ProviderNewtonsoft.SerializationProvider));
+                    new SerializationAbstractionProvider(NEWTONSOFT_SPAL_ID);
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
-                serializationAbstractionProvider.UseSerializationProvider<ProviderSystemTextJson.SerializationProvider>();
+                serializationAbstractionProvider.UseSerializationProvider(SYSTEMTEXT_SPAL_ID);
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
         }
@@ -73,7 +74,7 @@ namespace STX.Serialization.POC
                 IServiceCollection services = new ServiceCollection();
 
                 services
-                    .RegisterSerializationProviders(defaultProviderType: typeof(ProviderNewtonsoft.SerializationProvider));
+                    .RegisterSerializationProviders(defaultProviderSPALId: NEWTONSOFT_SPAL_ID);
 
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
                 using IServiceScope scope = serviceProvider.CreateScope();
@@ -93,7 +94,7 @@ namespace STX.Serialization.POC
                 IServiceCollection services = new ServiceCollection();
 
                 services
-                    .RegisterSerializationProviders(defaultProviderType: typeof(ProviderNewtonsoft.SerializationProvider));
+                    .RegisterSerializationProviders(defaultProviderSPALId: NEWTONSOFT_SPAL_ID);
 
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
                 using IServiceScope scope = serviceProvider.CreateScope();
@@ -113,7 +114,7 @@ namespace STX.Serialization.POC
                 IServiceCollection services = new ServiceCollection();
 
                 services
-                    .RegisterSerializationProviders(defaultProviderType: typeof(ProviderNewtonsoft.SerializationProvider));
+                    .RegisterSerializationProviders(defaultProviderSPALId: NEWTONSOFT_SPAL_ID);
 
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
                 using IServiceScope scope = serviceProvider.CreateScope();
@@ -124,7 +125,7 @@ namespace STX.Serialization.POC
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
-                serializationAbstractionProvider.UseSerializationProvider<ProviderSystemTextJson.SerializationProvider>();
+                serializationAbstractionProvider.UseSerializationProvider(spalId: SYSTEMTEXT_SPAL_ID);
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
         }

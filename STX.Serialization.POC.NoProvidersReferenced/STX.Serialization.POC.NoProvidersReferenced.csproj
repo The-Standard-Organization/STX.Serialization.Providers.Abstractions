@@ -12,8 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\STX.Serialization.Providers.NewtonsoftJson\STX.Serialization.Providers.NewtonsoftJson.csproj" />
-    <ProjectReference Include="..\STX.Serialization.Providers.SystemTextJson\STX.Serialization.Providers.SystemTextJson.csproj" />
     <ProjectReference Include="..\STX.Serialization.Providers\STX.Serialization.Providers.csproj" />
   </ItemGroup>
 

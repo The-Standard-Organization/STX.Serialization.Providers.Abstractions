@@ -5,97 +5,47 @@
 using Microsoft.Extensions.DependencyInjection;
 using STX.SPAL.Abstractions;
 using System;
-using System.Linq;
-using System.Reflection;
 
 namespace STX.SPAL.Core
-	{
-	public partial class SPALOrchestrationService : ISPALOrchestrationService
-		{
-		private const int DEFAULT_MAXIMUM_DEPTH_ANALISYS = 0;
+{
+    public partial class SPALOrchestrationService : ISPALOrchestrationService
+    {
+        private const int DEFAULT_MAXIMUM_DEPTH_ANALISYS = 0;
 
-		private readonly IServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
+        private static readonly bool allowMultipleProviders = true;
 
-		public SPALOrchestrationService(IServiceProvider serviceProvider)
-			{
-			this.serviceProvider = serviceProvider;
-			}
+        public SPALOrchestrationService()
+        {
+        }
 
-		private static Type[] GetInterfaceImplementations<T>(Assembly assembly)
-			where T : ISPALProvider
-			{
-			Type spalInterfaceType = typeof(T);
+        public SPALOrchestrationService(IServiceProvider serviceProvider) =>
+            this.serviceProvider = serviceProvider;
 
-			Type[] implementations =
-				assembly
-					.GetExportedTypes()
-					.Where(type =>
-						type.GetInterfaces()
-							.Any(interfaceType =>
-								//@interface is T
-								interfaceType.Assembly.FullName == spalInterfaceType.Assembly.FullName
-									&& interfaceType.FullName == spalInterfaceType.FullName
-							))
-					.ToArray();
+        public static IServiceCollection RegisterAllImplementations<T>(IServiceCollection services)
+            where T : ISPALProvider
+        {
+            Type[] exportedTypesOfT = GetExportedTypesFromAssembliesPaths<T>(concreteTypeProvider: null, spalId: null);
+            RegisterImplementations<T>(services, exportedTypesOfT);
+            Console.WriteLine($"Register Done!.");
 
-			return implementations;
-			}
+            return services;
+        }
 
-		private static Type[] GetExportedTypesFromAssemblyPath<T>(string assemblyPath)
-			where T : ISPALProvider
-			{
-			Assembly applicationAssembly = Assembly.LoadFrom(assemblyPath);
+        public T GetImplementation<T>() where T : ISPALProvider =>
+            TryCatch(() =>
+                ResolveImplementation<T>(concreteProviderType: null, spalId: null));
 
-			return GetInterfaceImplementations<T>(applicationAssembly);
-			}
+        public T GetImplementation<T>(Type concreteTypeProvider) where T : ISPALProvider =>
+            TryCatch(() =>
+                ResolveImplementation<T>(concreteTypeProvider, spalId: null));
 
-		private static IServiceCollection RegisterImplementation<T>(
-				IServiceCollection services,
-				Type implementationType,
-				bool allowMultipleTypes)
-			{
-			ValidateImplementationTypeRegistered<T>(services, allowMultipleTypes);
+        public T GetImplementation<T>(string spalId) where T : ISPALProvider =>
+            TryCatch(() =>
+                ResolveImplementation<T>(concreteProviderType: null, spalId: spalId));
 
-			services.AddScoped(typeof(T), implementationType);
-			Console.WriteLine($"Registered {implementationType.FullName} ({typeof(T).Name})");
-
-			return services;
-			}
-
-		private static IServiceCollection RegisterImplementations<T>(
-				IServiceCollection services,
-				Type[] implementationTypes,
-				bool allowMultipleTypes)
-			{
-			foreach (var implementationType in implementationTypes)
-				RegisterImplementation<T>(services, implementationType, allowMultipleTypes);
-
-			return services;
-			}
-
-		// Maybe this should go under an Extension Class for IServiceCollection
-		public static IServiceCollection RegisterAllImplementations<T>(IServiceCollection services, bool allowMultipleProviders = false)
-			where T : ISPALProvider
-			{
-			string[] applicationAssembliesPaths = GetApplicationAssemblies();
-			foreach (string applicationAssemblyPath in applicationAssembliesPaths)
-				{
-				Type[] exportedTypesOfT = GetExportedTypesFromAssemblyPath<T>(applicationAssemblyPath);
-				RegisterImplementations<T>(services, exportedTypesOfT, allowMultipleProviders);
-				}
-
-			Console.WriteLine($"Register Done!.");
-
-			return services;
-			}
-
-		public T GetImplementation<T>() =>
-			TryCatch(() =>
-			{
-				T instance = serviceProvider.GetRequiredService<T>();
-				ValidateInstance(instance);
-
-				return instance;
-			});
-		}
-	}
+        public T GetImplementation<T>(Type concreteProviderType, string spalId) where T : ISPALProvider =>
+            TryCatch(() =>
+                ResolveImplementation<T>(concreteProviderType: concreteProviderType, spalId: spalId));
+    }
+}

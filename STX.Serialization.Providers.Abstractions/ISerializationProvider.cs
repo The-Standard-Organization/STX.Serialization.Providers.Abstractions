@@ -5,8 +5,8 @@
 using STX.SPAL.Abstractions;
 
 namespace STX.Serialization.Providers.Abstractions
-	{
-	public interface ISerializationProvider : ISPALProvider, ISerializationOperations
-		{
-		}
-	}
+{
+    public interface ISerializationProvider : ISPALProvider, ISerializationOperations
+    {
+    }
+}

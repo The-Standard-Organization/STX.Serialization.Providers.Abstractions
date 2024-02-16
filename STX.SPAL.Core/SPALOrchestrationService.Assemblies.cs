@@ -7,43 +7,43 @@ using System.Linq;
 using System.Reflection;
 
 namespace STX.SPAL.Core
-	{
-	public partial class SPALOrchestrationService
-		{
-		private static Assembly[] GetDependantAssemblies(
-				Assembly assembly,
-				int currentDepth = 0,
-				int maximumDepth = DEFAULT_MAXIMUM_DEPTH_ANALISYS)
-			{
-			return assembly
-				.GetReferencedAssemblies()
-				.SelectMany(referencedAssemblyName =>
-				{
-					Assembly referencedAssembly = Assembly.Load(referencedAssemblyName);
+{
+    public partial class SPALOrchestrationService
+    {
+        private static Assembly[] GetDependantAssemblies(
+            Assembly assembly,
+            int currentDepth = 0,
+            int maximumDepth = DEFAULT_MAXIMUM_DEPTH_ANALISYS)
+        {
+            return assembly
+                .GetReferencedAssemblies()
+                .SelectMany(referencedAssemblyName =>
+                {
+                    Assembly referencedAssembly = Assembly.Load(referencedAssemblyName);
 
-					return currentDepth < maximumDepth
-						? GetDependantAssemblies(referencedAssembly, currentDepth + 1, maximumDepth)
-						: new Assembly[] { referencedAssembly };
-				})
-				.ToArray();
-			}
+                    return currentDepth < maximumDepth
+                        ? GetDependantAssemblies(referencedAssembly, currentDepth + 1, maximumDepth)
+                        : new Assembly[] { referencedAssembly };
+                })
+                .ToArray();
+        }
 
-		private static Assembly[] GetAllAssemblies(Assembly rootAssembly)
-			{
-			Assembly[] assemblies =
-				GetDependantAssemblies(rootAssembly)
-				.Distinct()
-				.ToArray();
+        private static Assembly[] GetAllAssemblies(Assembly rootAssembly)
+        {
+            Assembly[] assemblies =
+                GetDependantAssemblies(rootAssembly)
+                .Distinct()
+                .ToArray();
 
-			return assemblies;
-			}
+            return assemblies;
+        }
 
-		private static string[] GetApplicationAssemblies()
-			{
-			string applicationPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        private static string[] GetApplicationAssemblies()
+        {
+            string applicationPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-			return Directory.GetFiles(applicationPath, "*.dll");
-			}
-		}
+            return Directory.GetFiles(applicationPath, "*.dll");
+        }
+    }
 
-	}
+}

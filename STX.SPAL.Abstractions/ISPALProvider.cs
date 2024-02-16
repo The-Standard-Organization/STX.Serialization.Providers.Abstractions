@@ -3,8 +3,9 @@
 // ----------------------------------------------------------------------------------
 
 namespace STX.SPAL.Abstractions
-	{
-	public interface ISPALProvider
-		{
-		}
-	}
+{
+    public interface ISPALProvider
+    {
+        string GetSPALId();
+    }
+}

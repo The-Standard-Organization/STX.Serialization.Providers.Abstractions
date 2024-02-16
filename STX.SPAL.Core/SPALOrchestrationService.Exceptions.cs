@@ -5,25 +5,25 @@
 using System;
 
 namespace STX.SPAL.Core
-	{
-	public partial class SPALOrchestrationService
-		{
-		private static T TryCatch<T>(
-			Func<T> function)
-			{
-			try
-				{
-				return function();
-				}
+{
+    public partial class SPALOrchestrationService
+    {
+        private static T TryCatch<T>(
+            Func<T> function)
+        {
+            try
+            {
+                return function();
+            }
 
-			catch(InvalidOperationException invalidOperationException)
-				{
-				throw;
-				}
-			catch (Exception exception)
-				{
-				throw;
-				}
-			}
-		}
-	}
+            catch (InvalidOperationException invalidOperationException)
+            {
+                throw;
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
+        }
+    }
+}
