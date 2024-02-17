@@ -15,5 +15,8 @@ namespace STX.SPAL.Core
             return SPALOrchestrationService.RegisterAllImplementations<T>(services)
                 .AddScoped<ISPALOrchestrationService, SPALOrchestrationService>(sp => new SPALOrchestrationService(sp));
         }
+
+        public static ISPALOrchestrationService GetSPAL(this ISPALProvider spalProvider) =>
+            new SPALOrchestrationService();
     }
 }

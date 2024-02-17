@@ -7,7 +7,7 @@ using System;
 
 namespace STX.Serialization.Providers
 {
-    public partial class SerializationAbstractionProvider
+    internal partial class SerializationAbstractionProvider
     {
         private static void ValidateSerializationProvider(ISerializationProvider serializationProvider)
         {

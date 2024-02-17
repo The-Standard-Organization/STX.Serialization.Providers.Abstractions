@@ -18,8 +18,9 @@ namespace STX.Serialization.POC.NoProvidersReferenced
         {
             TryCatch(() =>
             {
-                ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider();
+                ISerializationAbstractionProvider serializationAbstractionProvider = null;
+                serializationAbstractionProvider =
+                    serializationAbstractionProvider.GetSerializationAbstractionProvider();
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
@@ -29,8 +30,9 @@ namespace STX.Serialization.POC.NoProvidersReferenced
         {
             TryCatch(() =>
             {
-                ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider(NEWTONSOFT_SPAL_ID);
+                ISerializationAbstractionProvider serializationAbstractionProvider = null;
+                serializationAbstractionProvider =
+                    serializationAbstractionProvider.GetSerializationAbstractionProvider(defaultProviderSPALId: NEWTONSOFT_SPAL_ID);
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
@@ -40,8 +42,9 @@ namespace STX.Serialization.POC.NoProvidersReferenced
         {
             TryCatch(() =>
             {
-                ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider(NEWTONSOFT_SPAL_ID);
+                ISerializationAbstractionProvider serializationAbstractionProvider = null;
+                serializationAbstractionProvider =
+                    serializationAbstractionProvider.GetSerializationAbstractionProvider(defaultProviderSPALId: NEWTONSOFT_SPAL_ID);
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
@@ -55,7 +58,6 @@ namespace STX.Serialization.POC.NoProvidersReferenced
             TryCatch(() =>
             {
                 IServiceCollection services = new ServiceCollection();
-
                 services
                     .RegisterSerializationProviders(defaultProviderSPALId: NEWTONSOFT_SPAL_ID);
 
@@ -75,7 +77,6 @@ namespace STX.Serialization.POC.NoProvidersReferenced
             TryCatch(() =>
             {
                 IServiceCollection services = new ServiceCollection();
-
                 services
                     .RegisterSerializationProviders(defaultProviderSPALId: NEWTONSOFT_SPAL_ID);
 

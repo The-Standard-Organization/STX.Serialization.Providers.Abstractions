@@ -8,7 +8,7 @@ using System;
 
 namespace STX.SPAL.Core
 {
-    public partial class SPALOrchestrationService : ISPALOrchestrationService
+    internal partial class SPALOrchestrationService : ISPALOrchestrationService
     {
         private const int DEFAULT_MAXIMUM_DEPTH_ANALISYS = 0;
 

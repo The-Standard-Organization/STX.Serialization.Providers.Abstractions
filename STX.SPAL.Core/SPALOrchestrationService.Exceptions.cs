@@ -6,7 +6,7 @@ using System;
 
 namespace STX.SPAL.Core
 {
-    public partial class SPALOrchestrationService
+    internal partial class SPALOrchestrationService
     {
         private static T TryCatch<T>(
             Func<T> function)

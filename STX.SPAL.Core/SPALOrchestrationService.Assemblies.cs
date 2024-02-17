@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace STX.SPAL.Core
 {
-    public partial class SPALOrchestrationService
+    internal partial class SPALOrchestrationService
     {
         private static Assembly[] GetDependantAssemblies(
             Assembly assembly,

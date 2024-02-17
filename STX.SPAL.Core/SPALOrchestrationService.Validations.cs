@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace STX.SPAL.Core
 {
-    public partial class SPALOrchestrationService
+    internal partial class SPALOrchestrationService
     {
         private static void ValidateImplementationTypeRegistered<T>(IServiceCollection services, bool allowMultipleTypes)
         {

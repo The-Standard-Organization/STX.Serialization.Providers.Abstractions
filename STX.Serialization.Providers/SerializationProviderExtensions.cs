@@ -25,5 +25,25 @@ namespace STX.Serialization.Providers
                         return new SerializationAbstractionProvider(spalOrchestrationService, defaultProviderType, defaultProviderSPALId);
                     });
         }
+
+        public static ISerializationAbstractionProvider GetSerializationAbstractionProvider(
+            this ISerializationAbstractionProvider serializationAbstractionProvider)
+        {
+            return new SerializationAbstractionProvider();
+        }
+
+        public static ISerializationAbstractionProvider GetSerializationAbstractionProvider<T>(
+            this ISerializationAbstractionProvider serializationAbstractionProvider)
+            where T : ISerializationProvider
+        {
+            return new SerializationAbstractionProvider(defaultProviderType: typeof(T));
+        }
+
+        public static ISerializationAbstractionProvider GetSerializationAbstractionProvider(
+            this ISerializationAbstractionProvider serializationAbstractionProvider,
+            string defaultProviderSPALId)
+        {
+            return new SerializationAbstractionProvider(defaultProviderSPALId);
+        }
     }
 }

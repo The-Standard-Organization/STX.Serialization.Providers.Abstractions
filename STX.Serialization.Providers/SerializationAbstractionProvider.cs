@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace STX.Serialization.Providers
 {
-    public partial class SerializationAbstractionProvider : ISerializationAbstractionProvider
+    internal partial class SerializationAbstractionProvider : ISerializationAbstractionProvider
     {
         private readonly ISPALOrchestrationService spalOrchestrationService;
         private readonly ISerializationProvider defaultSerializationProvider;
@@ -17,30 +17,36 @@ namespace STX.Serialization.Providers
 
         public SerializationAbstractionProvider()
         {
-            this.spalOrchestrationService = new SPALOrchestrationService();
+            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
             this.defaultSerializationProvider = this.serializationProvider =
                 GetSerializationProvider(serializationProviderType: null, spalId: null);
         }
 
         public SerializationAbstractionProvider(Type defaultProviderType)
         {
-            this.spalOrchestrationService = new SPALOrchestrationService();
+            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
             this.defaultSerializationProvider = this.serializationProvider =
-                GetSerializationProvider(serializationProviderType: defaultProviderType, spalId: null);
+                GetSerializationProvider(
+                    serializationProviderType: defaultProviderType,
+                    spalId: null);
         }
 
         public SerializationAbstractionProvider(string defaultProviderSPALId)
         {
-            this.spalOrchestrationService = new SPALOrchestrationService();
+            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
             this.defaultSerializationProvider = this.serializationProvider =
-                GetSerializationProvider(serializationProviderType: null, spalId: defaultProviderSPALId);
+                GetSerializationProvider(
+                    serializationProviderType: null,
+                    spalId: defaultProviderSPALId);
         }
 
         public SerializationAbstractionProvider(Type defaultProviderType, string defaultProviderSPALId)
         {
-            this.spalOrchestrationService = new SPALOrchestrationService();
+            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
             this.defaultSerializationProvider = this.serializationProvider =
-                GetSerializationProvider(serializationProviderType: defaultProviderType, spalId: defaultProviderSPALId);
+                GetSerializationProvider(
+                    serializationProviderType: defaultProviderType,
+                    spalId: defaultProviderSPALId);
         }
 
         public SerializationAbstractionProvider(ISerializationProvider serializationProvider)

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace STX.SPAL.Core
 {
-    public partial class SPALOrchestrationService
+    internal partial class SPALOrchestrationService
     {
         private T ResolveImplementationWithDI<T>(Type concreteProviderType, string spalId)
             where T : ISPALProvider

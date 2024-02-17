@@ -17,8 +17,8 @@ namespace STX.Serialization.POC
         {
             TryCatch(() =>
             {
-                ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider();
+                ISerializationAbstractionProvider serializationAbstractionProvider = null;
+                serializationAbstractionProvider = serializationAbstractionProvider.GetSerializationAbstractionProvider();
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
@@ -28,8 +28,9 @@ namespace STX.Serialization.POC
         {
             TryCatch(() =>
             {
-                ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider(typeof(ProviderNewtonsoft.SerializationProvider));
+                ISerializationAbstractionProvider serializationAbstractionProvider = null;
+                serializationAbstractionProvider =
+                    serializationAbstractionProvider.GetSerializationAbstractionProvider<ProviderNewtonsoft.SerializationProvider>();
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
@@ -39,8 +40,9 @@ namespace STX.Serialization.POC
         {
             TryCatch(() =>
             {
-                ISerializationAbstractionProvider serializationAbstractionProvider =
-                    new SerializationAbstractionProvider(typeof(ProviderNewtonsoft.SerializationProvider));
+                ISerializationAbstractionProvider serializationAbstractionProvider = null;
+                serializationAbstractionProvider =
+                    serializationAbstractionProvider.GetSerializationAbstractionProvider<ProviderNewtonsoft.SerializationProvider>();
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
@@ -54,7 +56,6 @@ namespace STX.Serialization.POC
             TryCatch(() =>
             {
                 IServiceCollection services = new ServiceCollection();
-
                 services
                     .RegisterSerializationProviders(defaultProviderType: typeof(ProviderNewtonsoft.SerializationProvider));
 
@@ -74,7 +75,6 @@ namespace STX.Serialization.POC
             TryCatch(() =>
             {
                 IServiceCollection services = new ServiceCollection();
-
                 services
                     .RegisterSerializationProviders(defaultProviderType: typeof(ProviderNewtonsoft.SerializationProvider));
 
@@ -94,7 +94,6 @@ namespace STX.Serialization.POC
             TryCatch(() =>
             {
                 IServiceCollection services = new ServiceCollection();
-
                 services
                     .RegisterSerializationProviders(defaultProviderType: typeof(ProviderNewtonsoft.SerializationProvider));
 
