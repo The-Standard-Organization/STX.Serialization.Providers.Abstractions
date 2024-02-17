@@ -9,7 +9,7 @@ using System;
 
 namespace STX.Serialization.Providers
 {
-    public static class SerializationProviderExtensions
+    public static class SerializationAbstractionProviderExtensions
     {
         public static IServiceCollection RegisterSerializationProviders(
             this IServiceCollection services,
