@@ -2,8 +2,12 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
-namespace STX.Serialization.Providers.Abstractions
+using System.IO;
+
+namespace STX.Serialization.Providers.Abstractions.Models
 {
-    public interface ISerializationAbstractionProvider : ISerializationOperations
-    { }
+    public class StreamData : IDataRepresentation<Stream>
+    {
+        public Stream Value { get; set; }
+    }
 }

@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.Providers.Abstractions", "STX.Serialization.Providers.Abstractions\STX.Serialization.Providers.Abstractions.csproj", "{38A8052D-3C6E-44DC-ACEB-AA28881C5CD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.Abstractions", "STX.Serialization.Providers.Abstractions\STX.Serialization.Providers.Abstractions.csproj", "{38A8052D-3C6E-44DC-ACEB-AA28881C5CD5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.Abstractions.Infrastructure.Build", "STX.Serialization.Providers.Abstractions.Infrastructure.Build\STX.Serialization.Providers.Abstractions.Infrastructure.Build.csproj", "{D47D1D45-BD43-4735-BFB5-83296B2941A5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.Abstractions.Tests.Acceptance", "STX.Serialization.Providers.Abstractions.Tests.Acceptance\STX.Serialization.Providers.Abstractions.Tests.Acceptance.csproj", "{A3E3CBE6-74E2-4196-94E1-F4238C36639E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STX.Serialization.Providers.Abstractions.Tests.Unit", "STX.Serialization.Providers.Abstractions.Tests.Unit\STX.Serialization.Providers.Abstractions.Tests.Unit.csproj", "{270ECD52-7950-448E-BA0B-55C6A30117FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +21,6 @@ Global
 		{D47D1D45-BD43-4735-BFB5-83296B2941A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D47D1D45-BD43-4735-BFB5-83296B2941A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D47D1D45-BD43-4735-BFB5-83296B2941A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3E3CBE6-74E2-4196-94E1-F4238C36639E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3E3CBE6-74E2-4196-94E1-F4238C36639E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3E3CBE6-74E2-4196-94E1-F4238C36639E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3E3CBE6-74E2-4196-94E1-F4238C36639E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{270ECD52-7950-448E-BA0B-55C6A30117FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{270ECD52-7950-448E-BA0B-55C6A30117FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{270ECD52-7950-448E-BA0B-55C6A30117FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{270ECD52-7950-448E-BA0B-55C6A30117FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
