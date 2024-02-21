@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\STX.Serialization.Providers.Abstractions\STX.Serialization.Providers.Abstractions.csproj" />
-    <ProjectReference Include="..\STX.SPAL.Providers\STX.SPAL.Providers.csproj" />
+    <ProjectReference Include="..\STX.SPAL.Abstractions\STX.SPAL.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

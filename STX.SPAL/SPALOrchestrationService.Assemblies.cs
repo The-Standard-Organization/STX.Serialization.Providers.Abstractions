@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace STX.SPAL.Core
+namespace STX.SPAL
 {
     internal partial class SPALOrchestrationService
     {

@@ -7,15 +7,24 @@ using STX.SPAL.Abstractions;
 using System;
 using System.Linq;
 
-namespace STX.SPAL.Core
+namespace STX.SPAL
 {
     internal partial class SPALOrchestrationService
     {
-        private static void ValidateImplementationTypeRegistered<T>(IServiceCollection services, bool allowMultipleTypes)
+        private static void ValidateSPALInterfaceType(Type spalInterfaceType)
+        {
+            if (spalInterfaceType == null)
+                throw new Exception("SPAL Interface can not be null.");
+
+            if (!spalInterfaceType.GetInterfaces().Any(@interface => @interface == typeof(ISPALProvider)))
+                throw new Exception("SPAL Interface can not be null.");
+        }
+
+        private static void ValidateImplementationTypeRegistered(IServiceCollection services, Type spalInterfaceType, bool allowMultipleTypes)
         {
             if (!allowMultipleTypes
-                    && services.Any(serviceDescriptor => serviceDescriptor.ServiceType == typeof(T)))
-                throw new Exception($"More than one implementation registered for {typeof(T).Name}. Please specify one of them, disallow multiple types or use keys for specifing multiple implementations for the same interface.");
+                    && services.Any(serviceDescriptor => serviceDescriptor.ServiceType == spalInterfaceType))
+                throw new Exception($"More than one implementation registered for {spalInterfaceType.Name}. Please specify one of them, disallow multiple types or use keys for specifing multiple implementations for the same interface.");
         }
 
         private static void ValidateExportedTypes<T>(Type[] exportedTypesOfT)
@@ -44,19 +53,19 @@ namespace STX.SPAL.Core
             {
                 if (string.IsNullOrEmpty(spalId)
                         && concreteProviderType == null)
-                    throw new Exception($"There is no dependency to resolve {typeof(T).Name}. Please add a package with one implementation or maybe SPAL detected more than one implementations.");
+                    throw new Exception($"There is no dependency to resolve {typeof(T).Name}. Please add a package with one implementation or maybe SPAL detected more than one implementation.");
                 
                 else if (!string.IsNullOrEmpty(spalId)
                             && concreteProviderType == null)
-                    throw new Exception($"There is no dependency to resolve {typeof(T).Name} for concrete provider spal Id {spalId}. Please add a package with one implementation or maybe SPAL detected more than one implementations.");
+                    throw new Exception($"There is no dependency to resolve {typeof(T).Name} for concrete provider spal Id {spalId}. Please add a package with one implementation or maybe SPAL detected more than one implementation.");
 
                 else if (string.IsNullOrEmpty(spalId)
                             && concreteProviderType != null)
-                    throw new Exception($"There is no dependency to resolve {typeof(T).Name} for concrete provider type {concreteProviderType.FullName}. Please add a package with one implementation or maybe SPAL detected more than one implementations.");
+                    throw new Exception($"There is no dependency to resolve {typeof(T).Name} for concrete provider type {concreteProviderType.FullName}. Please add a package with one implementation or maybe SPAL detected more than one implementation.");
 
                 else if (!string.IsNullOrEmpty(spalId)
                             && concreteProviderType != null)
-                    throw new Exception($"There is no dependency to resolve {typeof(T).Name} for concrete provider type {concreteProviderType.FullName} with spal Id {spalId}. Please add a package with one implementation or maybe SPAL detected more than one implementations.");
+                    throw new Exception($"There is no dependency to resolve {typeof(T).Name} for concrete provider type {concreteProviderType.FullName} with spal Id {spalId}. Please add a package with one implementation or maybe SPAL detected more than one implementation.");
             }
 
             else

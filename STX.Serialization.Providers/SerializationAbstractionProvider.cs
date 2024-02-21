@@ -2,8 +2,10 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
+using Microsoft.Extensions.DependencyInjection;
 using STX.Serialization.Providers.Abstractions;
-using STX.SPAL.Core;
+using STX.SPAL.Providers;
+using STX.SPAL.Providers.Abstractions;
 using System;
 using System.Threading.Tasks;
 
@@ -11,115 +13,115 @@ namespace STX.Serialization.Providers
 {
     internal partial class SerializationAbstractionProvider : ISerializationAbstractionProvider
     {
-        private readonly ISPALOrchestrationService spalOrchestrationService;
-        private readonly ISerializationProvider defaultSerializationProvider;
-        private ISerializationProvider serializationProvider;
+        private readonly IAbstractionProvider<ISerializationProvider> abstractionProvider;
 
-        public SerializationAbstractionProvider()
+        public SerializationAbstractionProvider(ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+            : this(defaultProviderType: null,
+                  defaultProviderSPALId: null,
+                  serviceLifetime)
         {
-            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
-            this.defaultSerializationProvider = this.serializationProvider =
-                GetSerializationProvider(serializationProviderType: null, spalId: null);
         }
 
-        public SerializationAbstractionProvider(Type defaultProviderType)
+        public SerializationAbstractionProvider(Type defaultProviderType, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+            : this(defaultProviderType: defaultProviderType,
+                  defaultProviderSPALId: null,
+                  serviceLifetime)
         {
-            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
-            this.defaultSerializationProvider = this.serializationProvider =
-                GetSerializationProvider(
-                    serializationProviderType: defaultProviderType,
-                    spalId: null);
         }
 
-        public SerializationAbstractionProvider(string defaultProviderSPALId)
+        public SerializationAbstractionProvider(string defaultProviderSPALId, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+            : this(defaultProviderType: null,
+                  defaultProviderSPALId: defaultProviderSPALId,
+                  serviceLifetime)
         {
-            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
-            this.defaultSerializationProvider = this.serializationProvider =
-                GetSerializationProvider(
-                    serializationProviderType: null,
-                    spalId: defaultProviderSPALId);
         }
 
-        public SerializationAbstractionProvider(Type defaultProviderType, string defaultProviderSPALId)
+        public SerializationAbstractionProvider(
+            Type defaultProviderType,
+            string defaultProviderSPALId,
+            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
-            this.spalOrchestrationService = defaultSerializationProvider.GetSPAL();
-            this.defaultSerializationProvider = this.serializationProvider =
-                GetSerializationProvider(
-                    serializationProviderType: defaultProviderType,
-                    spalId: defaultProviderSPALId);
+            this.abstractionProvider = abstractionProvider.GetAbstractionProvider<ISerializationProvider>(defaultProviderType, defaultProviderSPALId, serviceLifetime);
         }
 
         public SerializationAbstractionProvider(ISerializationProvider serializationProvider)
         {
-            this.defaultSerializationProvider = this.serializationProvider = serializationProvider;
+            this.abstractionProvider = abstractionProvider.GetAbstractionProvider(serializationProvider);
         }
 
         public SerializationAbstractionProvider(
-            ISPALOrchestrationService spalOrchestrationService,
-            Type defaultProviderType = null,
-            string defaultProviderSPALId = null)
+            IAbstractionProvider<ISerializationProvider> abstractionProvider,
+            Type defaultProviderType,
+            string defaultProviderSPALId)
         {
-            this.spalOrchestrationService = spalOrchestrationService;
-            this.defaultSerializationProvider = this.serializationProvider =
-                this.GetSerializationProvider(
-                    serializationProviderType: defaultProviderType,
-                    spalId: defaultProviderSPALId);
+            this.abstractionProvider = abstractionProvider;
+            abstractionProvider.UseProvider(defaultProviderType, defaultProviderSPALId);
         }
 
-        private ISerializationProvider GetSerializationProvider(Type serializationProviderType, string spalId)
+        public void UseProvider(string spalId = null)
         {
-            ISerializationProvider serializationProvider = null;
-
-            if (serializationProviderType == null
-                    && string.IsNullOrEmpty(spalId))
-            {
-                if (defaultSerializationProvider != null)
-                    serializationProvider = defaultSerializationProvider;
-                else
-                    serializationProvider = spalOrchestrationService.GetImplementation<ISerializationProvider>();
-            }
-            else
-                serializationProvider = spalOrchestrationService.GetImplementation<ISerializationProvider>(serializationProviderType, spalId);
-
-            return serializationProvider;
+            this.abstractionProvider.UseProvider(spalId: spalId);
         }
 
-        public void UseSerializationProvider<T>(string spalId = null)
-            where T : ISerializationProvider
+        public void UseProvider(Type concreteProviderType = null, string spalId = null)
         {
-            serializationProvider =
-                GetSerializationProvider(
-                    serializationProviderType: typeof(T),
-                    spalId: spalId);
+            throw new NotImplementedException();
         }
 
-        public void UseSerializationProvider(string spalId)
+        public void UseProvider<TConcreteProviderType>(string spalId = null) where TConcreteProviderType : ISerializationProvider
         {
-            serializationProvider =
-                GetSerializationProvider(
-                    serializationProviderType: null,
-                    spalId: spalId);
+            this.abstractionProvider.UseProvider<TConcreteProviderType>(spalId);
         }
 
         public string GetName()
         {
-            ValidateSerializationProvider(this.serializationProvider);
+            ValidateSerializationProvider(this.abstractionProvider);
 
-            return this.serializationProvider.GetName();
+            return this.abstractionProvider.GetProvider().GetName();
         }
 
         public ValueTask<T> Deserialize<T>(string content)
         {
-            ValidateSerializationProvider(this.serializationProvider);
+            ValidateSerializationProvider(this.abstractionProvider);
 
-            return this.serializationProvider.Deserialize<T>(content);
+            return this.abstractionProvider.GetProvider().Deserialize<T>(content);
         }
 
         public ValueTask<string> Serialize<T>(T @object)
         {
-            ValidateSerializationProvider(this.serializationProvider);
+            ValidateSerializationProvider(this.abstractionProvider);
 
-            return this.serializationProvider.Serialize<T>(@object);
+            return this.abstractionProvider.GetProvider().Serialize<T>(@object);
+        }
+
+        public void InvokeWithProvider<TConcreteProviderType, TResult>(Action<ISerializationProvider> providerFunction) where TConcreteProviderType : ISerializationProvider
+        {
+            this.abstractionProvider.InvokeWithProvider<TConcreteProviderType, TResult>(providerFunction);
+        }
+
+        public ISerializationProvider GetProvider()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Invoke<TResult>(Action<ISerializationProvider> spalFunction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TResult Invoke<TResult>(Func<ISerializationProvider, TResult> spalFunction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask InvokeAsync<TResult>(Func<ISerializationProvider, ValueTask> spalFunction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask<TResult> InvokeAsync<TResult>(Func<ISerializationProvider, ValueTask<TResult>> spalFunction)
+        {
+            throw new NotImplementedException();
         }
     }
 }

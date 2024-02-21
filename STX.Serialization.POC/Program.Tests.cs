@@ -5,6 +5,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using STX.Serialization.Providers;
 using STX.Serialization.Providers.Abstractions;
+using STX.SPAL.Abstractions;
 using System;
 using ProviderNewtonsoft = STX.Serialization.Providers.NewtonsoftJson;
 using ProviderSystemTextJson = STX.Serialization.Providers.SystemTextJson;
@@ -46,10 +47,18 @@ namespace STX.Serialization.POC
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
-                serializationAbstractionProvider.UseSerializationProvider<ProviderSystemTextJson.SerializationProvider>();
+                serializationAbstractionProvider.UseProvider<ProviderSystemTextJson.SerializationProvider>();
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
         }
+
+        private static void CallMultipleProvidersWithoutDIMultipleProviders() =>
+            TryCatch(() =>
+            {
+                ISerializationAbstractionProvider serializationAbstractionProvider = null;
+                serializationAbstractionProvider = serializationAbstractionProvider.GetSerializationAbstractionProvider<ProviderNewtonsoft.SerializationProvider>();
+                serializationAbstractionProvider.InvokeWithProvider<ISerializationProvider, bool[]>(provider => Console.WriteLine(provider.GetName()));
+            });
 
         private static void CallProviderWithDISingleProvider()
         {
@@ -106,8 +115,27 @@ namespace STX.Serialization.POC
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
-                serializationAbstractionProvider.UseSerializationProvider<ProviderSystemTextJson.SerializationProvider>();
+                serializationAbstractionProvider.UseProvider<ProviderSystemTextJson.SerializationProvider>();
                 Console.WriteLine(serializationAbstractionProvider.GetName());
+            });
+        }
+
+        private static void CallMultipleProvidersWithDIMultipleProviders()
+        {
+            TryCatch(() =>
+            {
+                IServiceCollection services = new ServiceCollection();
+                services
+                    .RegisterSerializationProviders(defaultProviderType: typeof(ProviderNewtonsoft.SerializationProvider));
+
+                IServiceProvider serviceProvider = services.BuildServiceProvider();
+                using IServiceScope scope = serviceProvider.CreateScope();
+
+                ISerializationAbstractionProvider serializationAbstractionProvider =
+                    scope.ServiceProvider
+                        .GetRequiredService<ISerializationAbstractionProvider>();
+
+                serializationAbstractionProvider.InvokeWithProvider<ISerializationProvider, bool[]>(provider => Console.WriteLine(provider.GetName()));
             });
         }
     }

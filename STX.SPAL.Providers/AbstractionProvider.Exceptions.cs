@@ -4,12 +4,12 @@
 
 using System;
 
-namespace STX.SPAL.Core
+namespace STX.SPAL.Providers
 {
-    internal partial class SPALOrchestrationService
+    internal partial class AbstractionProvider<T>
     {
-        private static T TryCatch<T>(
-            Func<T> function)
+        private static TResult TryCatch<TResult>(
+           Func<TResult> function)
         {
             try
             {

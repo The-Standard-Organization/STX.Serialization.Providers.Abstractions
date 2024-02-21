@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using STX.SPAL.Abstractions;
 using System;
 
-namespace STX.SPAL.Core
+namespace STX.SPAL
 {
     internal partial class SPALOrchestrationService : ISPALOrchestrationService
     {
@@ -15,20 +15,22 @@ namespace STX.SPAL.Core
         private readonly IServiceProvider serviceProvider;
         private static readonly bool allowMultipleProviders = true;
 
-        public SPALOrchestrationService()
+        public SPALOrchestrationService(Type spalInterfaceType, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
+            IServiceCollection services = new ServiceCollection();
+            RegisterImplementations(services, spalInterfaceType, serviceLifetime);
+            this.serviceProvider = services.BuildServiceProvider();
         }
 
         public SPALOrchestrationService(IServiceProvider serviceProvider) =>
             this.serviceProvider = serviceProvider;
 
-        public static IServiceCollection RegisterAllImplementations<T>(IServiceCollection services)
+
+        public static IServiceCollection RegisterAllImplementations<T>(IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
             where T : ISPALProvider
         {
-            Type[] exportedTypesOfT = GetExportedTypesFromAssembliesPaths<T>(concreteTypeProvider: null, spalId: null);
-            RegisterImplementations<T>(services, exportedTypesOfT);
-            Console.WriteLine($"Register Done!.");
-
+            Type spalInterfaceType = typeof(T);
+            RegisterImplementations(services, spalInterfaceType, serviceLifetime);
             return services;
         }
 
@@ -47,5 +49,9 @@ namespace STX.SPAL.Core
         public T GetImplementation<T>(Type concreteProviderType, string spalId) where T : ISPALProvider =>
             TryCatch(() =>
                 ResolveImplementation<T>(concreteProviderType: concreteProviderType, spalId: spalId));
+
+        public T[] GetImplementations<T>(Type concreteProviderType, string spalId) where T : ISPALProvider =>
+            TryCatch(() =>
+                ResolveImplementations<T>(concreteProviderType: concreteProviderType, spalId: spalId));
     }
 }

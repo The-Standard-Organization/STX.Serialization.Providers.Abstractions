@@ -11,10 +11,12 @@ namespace STX.Serialization.POC
             CallProviderWithoutDISingleProvider();
             CallProviderWithoutDIMultipleProviders();
             CallProviderWithoutDIMultipleProvidersSwitching();
+            CallMultipleProvidersWithoutDIMultipleProviders();
 
             CallProviderWithDISingleProvider();
             CallProviderWithDIMultipleProviders();
             CallProviderWithDIMultipleProvidersSwitching();
+            CallMultipleProvidersWithDIMultipleProviders();
         }
     }
 }

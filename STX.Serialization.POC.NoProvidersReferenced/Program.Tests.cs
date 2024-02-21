@@ -48,7 +48,7 @@ namespace STX.Serialization.POC.NoProvidersReferenced
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
-                serializationAbstractionProvider.UseSerializationProvider(SYSTEMTEXT_SPAL_ID);
+                serializationAbstractionProvider.UseProvider(SYSTEMTEXT_SPAL_ID);
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
         }
@@ -109,7 +109,7 @@ namespace STX.Serialization.POC.NoProvidersReferenced
 
                 Console.WriteLine(serializationAbstractionProvider.GetName());
 
-                serializationAbstractionProvider.UseSerializationProvider(spalId: SYSTEMTEXT_SPAL_ID);
+                serializationAbstractionProvider.UseProvider(spalId: SYSTEMTEXT_SPAL_ID);
                 Console.WriteLine(serializationAbstractionProvider.GetName());
             });
         }

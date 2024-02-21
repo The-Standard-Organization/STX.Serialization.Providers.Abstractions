@@ -2,43 +2,42 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
-using STX.SPAL.Abstractions;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace STX.SPAL.Core
+namespace STX.SPAL
 {
     internal partial class SPALOrchestrationService
     {
-        private static Type[] GetInterfaceImplementations<T>(
+        private static Type[] GetInterfaceImplementations(
             Assembly assembly,
-            Type concreteTypeProvider,
+            Type spalInterfaceType,
+            Type concreteProviderType,
             string spalId)
-            where T : ISPALProvider
         {
-            Type spalInterfaceType = typeof(T);
+            ValidateSPALInterfaceType(spalInterfaceType);
 
             Type[] implementations =
                 assembly
                     .GetExportedTypes()
                     .Where(exportedType =>
-                        exportedType.GetInterfaces()
+                        exportedType
+                            .GetInterfaces()
                             .Any(interfaceType =>
-                                //@interface is T
                                 interfaceType.Assembly.FullName == spalInterfaceType.Assembly.FullName
                                     && interfaceType.FullName == spalInterfaceType.FullName))
                      .Where(exportedType =>
-                        (concreteTypeProvider == null
+                        (concreteProviderType == null
                             && string.IsNullOrEmpty(spalId))
-                        || (concreteTypeProvider == null
+                        || (concreteProviderType == null
                             && !string.IsNullOrEmpty(spalId)
                             && exportedType.Namespace == spalId)
-                        || (concreteTypeProvider != null
-                            && concreteTypeProvider.FullName == exportedType.FullName
+                        || (concreteProviderType != null
+                            && concreteProviderType.FullName == exportedType.FullName
                             && string.IsNullOrEmpty(spalId))
-                        || (concreteTypeProvider != null
-                            && concreteTypeProvider.FullName == exportedType.FullName
+                        || (concreteProviderType != null
+                            && concreteProviderType.FullName == exportedType.FullName
                             && !string.IsNullOrEmpty(spalId)
                             && exportedType.Namespace == spalId))
                     .ToArray();
@@ -46,25 +45,24 @@ namespace STX.SPAL.Core
             return implementations;
         }
 
-        private static Type[] GetExportedTypesFromAssemblyPath<T>(
+        private static Type[] GetExportedTypesFromAssemblyPath(
             string assemblyPath,
+            Type spalInterfaceType,
             Type concreteTypeProvider,
             string spalId)
-            where T : ISPALProvider
         {
             Assembly applicationAssembly = Assembly.LoadFrom(assemblyPath);
 
-            return GetInterfaceImplementations<T>(applicationAssembly, concreteTypeProvider, spalId);
+            return GetInterfaceImplementations(applicationAssembly, spalInterfaceType, concreteTypeProvider, spalId);
         }
 
-        private static Type[] GetExportedTypesFromAssembliesPaths<T>(Type concreteTypeProvider, string spalId)
-            where T : ISPALProvider
+        private static Type[] GetExportedTypesFromAssembliesPaths(Type spalInterfaceType, Type concreteTypeProvider, string spalId)
         {
             string[] applicationAssembliesPaths = GetApplicationAssemblies();
             Type[] exportedTypesOfT =
                 applicationAssembliesPaths
                     .SelectMany(applicationAssemblyPath =>
-                        GetExportedTypesFromAssemblyPath<T>(applicationAssemblyPath, concreteTypeProvider, spalId))
+                        GetExportedTypesFromAssemblyPath(applicationAssemblyPath, spalInterfaceType, concreteTypeProvider, spalId))
                     .ToArray();
 
             return exportedTypesOfT;

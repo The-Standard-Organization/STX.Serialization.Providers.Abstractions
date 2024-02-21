@@ -7,11 +7,11 @@ using STX.SPAL.Abstractions;
 using System;
 using System.Linq;
 
-namespace STX.SPAL.Core
+namespace STX.SPAL
 {
     internal partial class SPALOrchestrationService
     {
-        private T ResolveImplementationWithDI<T>(Type concreteProviderType, string spalId)
+        private T ResolveImplementation<T>(Type concreteProviderType, string spalId)
             where T : ISPALProvider
         {
             if (serviceProvider == null)
@@ -49,29 +49,17 @@ namespace STX.SPAL.Core
                     implementation = serviceProvider.GetService<T>();
             }
 
+            ValidateInstance(implementation, concreteProviderType, spalId);
+
             return implementation;
         }
 
-        private T ResolveImplementationWithoutDI<T>(Type concreteProviderType, string spalId)
+        private T[] ResolveImplementations<T>(Type concreteProviderType, string spalId)
             where T : ISPALProvider
         {
-            Type[] exportedTypesOfT = GetExportedTypesFromAssembliesPaths<T>(concreteProviderType, spalId);
-            ValidateExportedTypes<T>(exportedTypesOfT);
-
-            return (T)Activator.CreateInstance(exportedTypesOfT.Single());
-        }
-
-        private T ResolveImplementation<T>(Type concreteProviderType, string spalId)
-            where T : ISPALProvider
-        {
-            T instance =
-                serviceProvider != null
-                    ? ResolveImplementationWithDI<T>(concreteProviderType, spalId)
-                    : ResolveImplementationWithoutDI<T>(concreteProviderType, spalId);
-
-            ValidateInstance(instance, concreteProviderType, spalId);
-
-            return instance;
+            // TODO - We need a way to get all the services registered. This method implemented doesn´t return anything because dependending
+            // on how the registering was done maybe it used a keyService.
+            return serviceProvider.GetServices<T>().ToArray();
         }
     }
 }
