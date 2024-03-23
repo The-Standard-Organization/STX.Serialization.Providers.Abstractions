@@ -2,10 +2,10 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-
-namespace STX.Serialization.Providers.Abstractions
+namespace STX.Serialization.Providers.Abstractions.Models
 {
-    public interface ISerializationProvider : ISerializationOperations
-    { }
+    public class ByteArrayData : IDataRepresentation<byte[]>
+    {
+        public byte[] Value { get; set; }
+    }
 }
